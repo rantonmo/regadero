@@ -1,3 +1,3 @@
 # regadero
 
-A simple water system
+A simple irrigation system.
