@@ -1,0 +1,6 @@
+{
+  "app": "telegram_bot",
+  "vars": {
+    "telegram_token": "0000000000:AAAA-aaaaaaaaaaaaaaaaa-0000000000000"
+  }
+}
