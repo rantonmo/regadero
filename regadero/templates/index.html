@@ -1,0 +1,28 @@
+{% args menu %}
+{% include 'base_header.html' menu %}
+<form method="POST">
+  <div class="row">
+    <div class="col-6 form-floating">
+      <select class="form-select" aria-label="Select one led color" id="led" name="led">
+        <option selected>Select a led color</option>
+        <option value="red">Red</option>
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+      </select>
+      <label for="floatingPassword">Color of the led</label>
+    </div>
+    <div class="col-6 form-floating">
+      <select class="form-select" aria-label="Action to perform with the led" id="action" name="action">
+        <option selected>Select an action</option>
+        <option value="blink">Blink</option>
+        <option value="on">On</option>
+        <option value="off">Off</option>
+      </select>
+      <label for="floatingPassword">Action to perform</label>
+    </div>
+  </div>
+  <div class="row">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
+{% include 'base_footer.html' %}
