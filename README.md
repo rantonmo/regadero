@@ -2,10 +2,6 @@
 
 A simple irrigation system.
 
-
-
-
-
 ## Firmware
 
 [Download page](https://micropython.org/download/ESP32_GENERIC/)
@@ -16,8 +12,14 @@ A simple irrigation system.
 
 
 ## Manage files
-
-
+* **ampy:** `ampy -p /dev/tty.usbserial-1410 put max7219.py`
+* **rshell** `rshell -p /dev/ttyUSB0 --editor vi --buffer-size=30`
 
 ## Connection
-`creen /dev/ttyUSB0 115200`
+`screen /dev/ttyUSB0 115200`
+
+
+## Web server
+
+* [microdot](https://github.com/miguelgrinberg/microdot)
+* [utemplate](https://github.com/pfalcon/utemplate)
