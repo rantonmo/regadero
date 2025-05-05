@@ -2,6 +2,9 @@
 settings.json
 settings.yaml
 
+testing
+bck
+.python-version
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -19,7 +22,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/
 lib64/
 parts/
 sdist/
