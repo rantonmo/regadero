@@ -25,7 +25,6 @@ class GPIO_MANAGER():
             else:
                 self.logger.info(f"Error: unknow gpio type: {_settings[item]['type']}", )
 
-
     def list_leds(self):
         for item in self.leds.keys():
             print(item)
@@ -37,6 +36,20 @@ class GPIO_MANAGER():
                 self.leds[led].toggle()
                 t_sleep(sleep)
             self.leds[led].off()  # always ends off
+
+    def led_on(self, led):
+        self.logger.info(f"set led {led} on")
+        if led in self.leds:
+            self.leds[led].on()
+        else:
+            self.logger.error(f"led {led} not configured")
+
+    def led_off(self, led):
+        self.logger.info(f"set led {led} ff")
+        if led in self.leds:
+            self.leds[led].off()
+        else:
+            self.logger.error(f"led {led} not configured")
 
     def sound(self, times=4, sleep=0.5):  # default 2 seg -> 0.5 * 4
         self.logger.info(f"make sound: {times} - {sleep}", times, sleep)
