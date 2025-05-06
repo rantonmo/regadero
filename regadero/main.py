@@ -1,16 +1,22 @@
-from utils import Logger
-
 from json import loads as json_loads
+import ntptime
 
-from gpio_manager import GPIO_MANAGER
+from microdot import Microdot, Response
+from microdot.utemplate import Template
+
+from logger import Logger
+
+from gpio_manager import GpioManager
 from wifi_manager import configure_wifi
+from utils import datetime
+
 
 logger = Logger()
 
 logger.info("getting settings")
 SETTINGS = json_loads(open('settings.json', 'r').read())
 
-gpm = GPIO_MANAGER(SETTINGS["PINS"])
+gpm = GpioManager(SETTINGS["PINS"])
 if gpm:
     gpm.blink_led('red', 3, 0.5)
 
@@ -19,13 +25,13 @@ wlan = configure_wifi(SETTINGS['wifi'])
 if wlan:
     gpm.blink_led('blue')
 
-
-from microdot import Microdot, Response
-from microdot.utemplate import Template
+logger.info("configuring local time")
+ntptime.host = "1.europe.pool.ntp.org"
+ntptime.settime()
+logger.info(f"  > time is {datetime.datetime()}")
 
 app = Microdot()
 Response.default_content_type = 'text/html'
-
 
 @app.route('/', methods=['GET', 'POST'])
 async def index(req):
