@@ -1,4 +1,4 @@
-from utils import Logger
+from logger import Logger
 
 from network import WLAN as N_WLAN, STA_IF as N_STA_IF
 from time import sleep as t_sleep

@@ -6,7 +6,7 @@ from microdot.utemplate import Template
 
 from logger import Logger
 
-from gpio_manager import GPIO_MANAGER
+from gpio_manager import Gpio_Manager
 from wifi_manager import configure_wifi
 from utils import localtime
 

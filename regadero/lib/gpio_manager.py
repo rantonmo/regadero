@@ -1,10 +1,8 @@
-from utils import Logger
+from logger import Logger
 from machine import Pin
 from time import sleep as t_sleep
 
-
-
-class GPIO_MANAGER():
+class Gpio_Manager():
     leds = {}
     buttons = {}
     buzz = None
