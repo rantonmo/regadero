@@ -2,7 +2,7 @@ from logger import Logger
 from machine import Pin
 from time import sleep as t_sleep
 
-class Gpio_Manager():
+class GpioManager():
     leds = {}
     buttons = {}
     buzz = None

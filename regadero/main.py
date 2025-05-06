@@ -6,7 +6,7 @@ from microdot.utemplate import Template
 
 from logger import Logger
 
-from gpio_manager import Gpio_Manager
+from gpio_manager import GpioManager
 from wifi_manager import configure_wifi
 from utils import localtime
 
@@ -16,7 +16,7 @@ logger = Logger()
 logger.info("getting settings")
 SETTINGS = json_loads(open('settings.json', 'r').read())
 
-gpm = GPIO_MANAGER(SETTINGS["PINS"])
+gpm = GpioManager(SETTINGS["PINS"])
 if gpm:
     gpm.blink_led('red', 3, 0.5)
 
