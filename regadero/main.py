@@ -8,7 +8,7 @@ from logger import Logger
 
 from gpio_manager import GPIO_MANAGER
 from wifi_manager import configure_wifi
-from util import localtime
+from utils import localtime
 
 
 logger = Logger()
