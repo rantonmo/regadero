@@ -47,15 +47,16 @@ async def index(req):
 
     return Template('index.html').render(page="index")
 
-
 @app.route('/program')
 async def index(req):
     return Template('program.html').render(page='program')
 
+@app.route('/wether')
+async def index(req):
+    return Template('wether.html').render(page='wether')
 
 @app.route('/system')
 async def page2(req):
-
-    return Template('page2.html').render(page='system')
+    return Template('system.html').render(page='system')
 
 app.run(debug=True, port=8080)

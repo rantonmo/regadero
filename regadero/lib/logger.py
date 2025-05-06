@@ -28,8 +28,10 @@ class Logger():
 
 
     def emit(self, message, level="INFO"):
+        _msg = f"{level:>10} - {self.name:>8}: {message}"
+        print(_msg)
         with open(f"{self.path}/{self.filename}", "a") as f:
-            f.write(f"{level:>10} - {self.name:>8}: {message}\n")
+            f.write(_msg + "\n")
 
     def info(self, message):
         self.emit(message, "INFO")
