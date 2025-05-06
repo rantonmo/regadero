@@ -1,6 +1,9 @@
-from utils import Logger
-
 from json import loads as json_loads
+
+from microdot import Microdot, Response
+from microdot.utemplate import Template
+
+from logger import Logger
 
 from gpio_manager import GPIO_MANAGER
 from wifi_manager import configure_wifi
@@ -20,8 +23,6 @@ if wlan:
     gpm.blink_led('blue')
 
 
-from microdot import Microdot, Response
-from microdot.utemplate import Template
 
 app = Microdot()
 Response.default_content_type = 'text/html'
