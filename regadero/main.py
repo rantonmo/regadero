@@ -35,7 +35,6 @@ Response.default_content_type = 'text/html'
 
 @app.route('/', methods=['GET', 'POST'])
 async def index(req):
-    menu = "testing"
     if req.method == 'POST':
         led = req.form.get('led')
         action = req.form.get('action')
@@ -46,17 +45,17 @@ async def index(req):
         elif action == "off":
             gpm.led_off(led)
 
-    return Template('index.html').render(menu=menu)
+    return Template('index.html').render(page="index")
 
 
-@app.route('/page1')
+@app.route('/program')
 async def index(req):
-    return Template('page1.html').render(page='Page 1')
+    return Template('program.html').render(page='program')
 
 
-@app.route('/page2')
+@app.route('/system')
 async def page2(req):
 
-    return Template('page2.html').render(page='Page 2')
+    return Template('page2.html').render(page='system')
 
 app.run(debug=True, port=8080)
