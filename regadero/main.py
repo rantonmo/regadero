@@ -8,7 +8,7 @@ from logger import Logger
 
 from gpio_manager import GpioManager
 from wifi_manager import configure_wifi
-from utils import localtime
+from utils import datetime
 
 
 logger = Logger()
@@ -28,7 +28,7 @@ if wlan:
 logger.info("configuring local time")
 ntptime.host = "1.europe.pool.ntp.org"
 ntptime.settime()
-logger.info(f"  > time is {localtime.datetime()}")
+logger.info(f"  > time is {datetime.datetime()}")
 
 app = Microdot()
 Response.default_content_type = 'text/html'
