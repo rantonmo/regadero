@@ -1,12 +1,12 @@
 
 from os import rename as f_rename, listdir
+from utils import f_exists
 
 class Logger():
 
     filename = None
     path = None
     name = None
-
 
     def __init__(self, filename="regadero.log", path="logs", name="root"):
         self.filename = filename
