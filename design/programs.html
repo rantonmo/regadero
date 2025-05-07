@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <title>Regadero - basic irrigation system - {{ page }}</title>
+  </head>
+  <body class="bg-body-tertiary">
+
+    <header class="container-fluid bg-secondary d-flex p-2">
+      <img src="img/water-drop3.png" alt="Regadero by Rodri" width="50" height="50" class="d-inline-block">
+      <p class="w-50 m-1 p-2 text-light fs-5 fw-bold">Regadero - Basic Irrigation System</p>
+      <a class="w-50 m-1 p-2 text-white fs-6 text-end text-decoration-none" href="#"><i>-superadmin-</i>&nbsp;&nbsp;rmoreno logout</a>
+      <!--a class="w-50 m-1 p-2 text-white fs-6 text-end" href="#">Log-In</a-->
+    </header>
+    <div class="py-2 bg-body-secondary">
+        <!-- Start Navbar -->
+        <div class="container-sm justify-content-center bg-primary bg-opacity-25 rounded">
+          <ul class="nav nav-pills justify-content-center">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/program">Program</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/wether">Wether</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/system">System</a>
+            </li>
+          </ul>
+        </div>
+        <!-- END Navbar -->
+
+      <div class="container">
+      <!-- start page content -->
+        <form class="m-5">
+          <div class="input-group mb-3">
+            <label class="input-group-text form-control-lg" for="inputGroupSelect01">Settings for program:</label>
+            <select class="form-select form-control-lg" id="inputGroupSelect01">
+              <option value="1">Jardin principal</option>
+              <option value="2">Huerto y kiwis</option>
+            </select>
+          </div>
+        </form>
+
+        <form class="m-5 p-5 border border-secondary rounded">
+          <!--legend class="mb-3">Program settings: <b>Jardin principal</b></legend-->
+          <div class="input-group">
+            <span class="input-group-text">Program name</span>
+            <div class="input-group-text">
+              <label class="form-check-label" for="zone1_enabled">Enabled</label>
+              <input class="form-check-input ms-5" id="zone1_enabled" name="zone1_enabled" type="checkbox" value="on" >
+            </div>
+            <input type="text" class="form-control" value="Jardin principal" name="program_name">
+          </div>
+
+
+          <div class="input-group">
+            <span class="input-group-text">Schedule time</span>
+            <input type="text" class="form-control" value="02:00:00" name="schedule_time">
+          </div>
+
+          <div class="form-check form-switch">
+            <input class="form-check-input bg-secondary" type="checkbox" role="switch" id="wether_adjustment" name="wether_adjustment" checked>
+            <label class="form-check-label" for="wether_adjustment">Wether adjustment</label>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Default duration for all zones</span>
+            <input type="text" class="form-control" value="20" name="duration_time">
+          </div>
+
+          <div class="input-group mb-1 w-75">
+            <span class="input-group-text">Zone 1</span>
+            <div class="input-group-text">
+              <label class="form-check-label" for="zone1_enabled">Enabled</label>
+              <input class="form-check-input ms-5" id="zone1_enabled" name="zone1_enabled" type="checkbox" value="on" >
+            </div>
+            <input type="text" class="form-control" aria-label="Enable and custom time for Zone 1" value="">
+          </div>
+
+          <div class="input-group mb-1 w-75">
+            <span class="input-group-text">Zone 2</span>
+            <div class="input-group-text">
+              <label class="form-check-label" for="zone1_enabled">Enabled</label>
+              <input class="form-check-input ms-5" id="zone2_enabled" name="zone2_enabled" type="checkbox" value="on" >
+            </div>
+            <input type="text" class="form-control" aria-label="Enable and custom time for Zone 2" value="25">
+          </div>
+
+          <div class="input-group mb-1 w-75">
+            <span class="input-group-text">Zone 3</span>
+            <div class="input-group-text">
+              <label class="form-check-label" for="zone1_enabled">Enabled</label>
+              <input class="form-check-input ms-5" id="zone3_enabled" name="zone3_enabled" type="checkbox" value="on" >
+            </div>
+            <input type="text" class="form-control" aria-label="Enable and custom time for Zone 3" value="">
+          </div>
+
+          <div class="input-group mb-1 w-75">
+            <span class="input-group-text">Zone 4</span>
+            <div class="input-group-text">
+              <label class="form-check-label" for="zone4_enabled">Enabled</label>
+              <input class="form-check-input ms-5" id="zone1_enabled" name="zone4_enabled" type="checkbox" value="on" >
+            </div>
+            <input type="text" class="form-control" aria-label="Enable and custom time for Zone 1" value="">
+          </div>
+
+          <button type="submit" class="btn btn-secondary mt-3">Update</button>
+        </form>
+      <!-- END page content -->
+
+      <!-- footer -->
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js" integrity="sha384-VQqxDN0EQCkWoxt/0vsQvZswzTHUVOImccYmSyhJTp7kGtPed0Qcx8rK9h9YEgx+" crossorigin="anonymous"></script>
+
+      <footer class="footer mt-4 py-3 bg-dark-subtle">
+        <div>
+            <p class="text-center mb-0">
+                <a href="#" target="_blank" class="text-decoration-none">
+                <span class="text-muted">github project</span></a> |
+                <a href="#" class="text-decoration-none"><span class="text-muted">Project Documentation</a></span>&nbsp;|
+                <a href="#" onclick="window.open(this.href, '_blank'); return false;" class="text-decoration-none"><span class="text-muted">version-001</span></a>
+            </p>
+        </div>
+      </footer>
+    </div> <!-- bg-color -->
+  </body>
+</html>
