@@ -16,123 +16,120 @@
       <p class="w-50 m-1 p-2 text-light fs-5 fw-bold">Regadero - Basic Irrigation System</p>
       <a class="w-50 m-1 p-2 text-white fs-6 text-end text-decoration-none" href="#"><i>-superadmin-</i>&nbsp;&nbsp;rmoreno logout</a>
       <!--a class="w-50 m-1 p-2 text-white fs-6 text-end" href="#">Log-In</a-->
-  </header>
+    </header>
+    <div class="py-2 bg-body-secondary">
+        <!-- Start Navbar -->
+        <div class="container-sm bg-primary bg-opacity-25 rounded">
+          <ul class="nav nav-pills">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/program">Program</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/wether">Wether</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/system">System</a>
+            </li>
+          </ul>
+        </div>
+        <!-- END Navbar -->
 
-<div class="py-2 bg-body-secondary">
-    <div class="container-sm bg-primary bg-opacity-25 rounded">
-      <ul class="nav nav-pills">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="/program">Program</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/wether">Wether</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/system">System</a>
-        </li>
-      </ul>
-    </div>
-<div class="container">
-<!-- page content -->
-<form class="m-5 p-5 border border-secondary rounded">
-  <legend class="mb-3">This is an example of Form</legend>
-  <div class="input-group">
-    <span class="input-group-text">Led to run an action</span>
-    <select class="form-select" aria-label="Select one led color" id="led" name="led">
-      <option value="red" selected>Red</option>
-      <option value="blue">Blue</option>
-      <option value="green">Green</option>
-    </select>
-  </div>
-  <div id="ledHelp" class="form-text mb-3 ps-5"><b>NOTE:</b>Led action could take some time.</div>
+      <div class="container">
+      <!-- start page content -->
+        <form class="m-5 p-5 border border-secondary rounded">
+          <legend class="mb-3">This is an example of Form</legend>
+          <div class="input-group">
+            <span class="input-group-text w-25">Led to run an action</span>
+            <select class="form-select" aria-label="Select one led color" id="led" name="led">
+              <option value="red" selected>Red</option>
+              <option value="blue">Blue</option>
+              <option value="green">Green</option>
+            </select>
+          </div>
+          <div id="ledHelp" class="form-text mb-3 ps-5"><b>NOTE:</b>Led action could take some time.</div>
 
-  <div class="input-group">
-    <span class="input-group-text">Action to perform</span>
-    <select class="form-select" aria-label="Action to perform with the led" id="action" name="action">
-      <option value="blink" selected>Blink</option>
-      <option value="f_blink">Fast Blink</option>
-      <option value="on">On</option>
-      <option value="off">Off</option>
-    </select>
-  </div>
-  <div class="row mb-3 ps-5">
-    <p class="text-start">
-      <b>Some documentation:</b>
-      <a href="https://github.com/miguelgrinberg/microdot" onclick="window.open(this.href, '_blank'); return false;" class="link-dark text-decoration-none">Microdot</a>&nbsp;|
-      <a href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" onclick="window.open(this.href, '_blank'); return false;" class="link-dark text-decoration-none">BootStrap 5.3</a>
-    </p>
-  </div>
+          <div class="input-group">
+            <span class="input-group-text w-25">Action to perform</span>
+            <select class="form-select" aria-label="Action to perform with the led" id="action" name="action">
+              <option value="blink" selected>Blink</option>
+              <option value="f_blink">Fast Blink</option>
+              <option value="on">On</option>
+              <option value="off">Off</option>
+            </select>
+          </div>
+          <div class="row mb-3 ps-5">
+            <p class="text-start">
+              <b>Some documentation:</b>
+              <a href="https://github.com/miguelgrinberg/microdot" onclick="window.open(this.href, '_blank'); return false;" class="link-dark text-decoration-none">Microdot</a>&nbsp;|
+              <a href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" onclick="window.open(this.href, '_blank'); return false;" class="link-dark text-decoration-none">BootStrap 5.3</a>
+            </p>
+          </div>
 
-  <div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" role="switch" id="switch_1" name="switch_1">
-    <label class="form-check-label" for="switch_1">Check SW1 out</label>
-  </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="switch_1" name="switch_1">
+            <label class="form-check-label" for="switch_1">Check SW1 out</label>
+          </div>
 
-  <div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" role="switch" id="switch_2" name="switch_2" checked>
-    <label class="form-check-label" for="switch_2">Check SW2 out</label>
-  </div>
-  <button type="submit" class="btn btn-primary mt-3">Submit</button>
-</form>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="switch_2" name="switch_2" checked>
+            <label class="form-check-label" for="switch_2">Check SW2 out</label>
+          </div>
+          <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        </form>
 
-<div class="container text-center mt-5">
-  <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
-    <div class="col">
-      <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
-    </div>
-    <div class="col">
-      <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
-    </div>
-    <div class="col">
-      <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
-    </div>
-    <div class="col">
-      <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
-    </div>
-    <div class="col">
-      <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
-    </div>
-    <div class="col">
-      <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
-    </div>
-    <div class="col">
-      <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
-    </div>
-    <div class="col">
-      <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
-    </div>
-    <div class="col">
-      <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
-    </div>
-    <div class="col">
-      <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
-    </div>
-  </div>
-</div>
+        <div class="container text-center mt-5">
+          <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+            <div class="col">
+              <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
+            </div>
+            <div class="col">
+              <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
+            </div>
+            <div class="col">
+              <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
+            </div>
+            <div class="col">
+              <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
+            </div>
+            <div class="col">
+              <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
+            </div>
+            <div class="col">
+              <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
+            </div>
+            <div class="col">
+              <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
+            </div>
+            <div class="col">
+              <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
+            </div>
+            <div class="col">
+              <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
+            </div>
+            <div class="col">
+              <div class="p-3 border border-warning bg-warning-subtle">Row column</div>
+            </div>
+          </div>
+        </div>
+      <!-- END page content -->
 
-<!-- end page content -->
-
-<!-- footer -->
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js" integrity="sha384-VQqxDN0EQCkWoxt/0vsQvZswzTHUVOImccYmSyhJTp7kGtPed0Qcx8rK9h9YEgx+" crossorigin="anonymous"></script>
-
-
-    <footer class="footer mt-4 py-3 bg-dark-subtle">
-      <div>
-          <p class="text-center mb-0">
-              <a href="#" target="_blank" class="text-decoration-none">
-              <span class="text-muted">github project</span></a> |
-              <a href="#" class="text-decoration-none"><span class="text-muted">Project Documentation</a></span>&nbsp;|
-              <a href="#" onclick="window.open(this.href, '_blank'); return false;" class="text-decoration-none"><span class="text-muted">version-001</span></a>
-          </p>
+      <!-- footer -->
       </div>
-    </footer>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js" integrity="sha384-VQqxDN0EQCkWoxt/0vsQvZswzTHUVOImccYmSyhJTp7kGtPed0Qcx8rK9h9YEgx+" crossorigin="anonymous"></script>
 
-
-
-</div> <!-- bg-color -->
+      <footer class="footer mt-4 py-3 bg-dark-subtle">
+        <div>
+            <p class="text-center mb-0">
+                <a href="#" target="_blank" class="text-decoration-none">
+                <span class="text-muted">github project</span></a> |
+                <a href="#" class="text-decoration-none"><span class="text-muted">Project Documentation</a></span>&nbsp;|
+                <a href="#" onclick="window.open(this.href, '_blank'); return false;" class="text-decoration-none"><span class="text-muted">version-001</span></a>
+            </p>
+        </div>
+      </footer>
+    </div> <!-- bg-color -->
   </body>
 </html>
