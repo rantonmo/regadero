@@ -28,7 +28,7 @@ class GpioManager():
 
             elif _settings[item]["type"] == "led":
                 self.leds[item.lower()] = Pin(_settings[item]["pin"], Pin.OUT, value=0, drive=Pin.DRIVE_0)
-                self.l_ock_led[item.lower()] = False
+                self._lock_led[item.lower()] = False
 
             elif _settings[item]["type"] == "button":
                 self.buttons[item.lower()] = Pin(_settings[item]["pin"], Pin.IN, Pin.PULL_DOWN)
@@ -65,7 +65,7 @@ class GpioManager():
             self.logger(f"led {led} is locked!!! aborting...")
             return
 
-        self.lock_led[led] = True
+        self._lock_led[led] = True
         self.logger(f"starting thread to blinking led {led}")
         return _thread.start_new_thread(self._blink_led, (led, SP_TIME[speed]))
 
