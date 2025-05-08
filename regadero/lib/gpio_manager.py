@@ -59,22 +59,22 @@ class GpioManager():
 
     def start_blink_led(self, led, speed="normal"):
         if not led in self._lock_led.keys():
-            self.logger(f"led {led} not found!!! aborting...")
+            self.logger.info(f"led {led} not found!!! aborting...")
             return
         if self._lock_led[led]:
-            self.logger(f"led {led} is locked!!! aborting...")
+            self.logger.info(f"led {led} is locked!!! aborting...")
             return
 
         self._lock_led[led] = True
-        self.logger(f"starting thread to blinking led {led}")
+        self.logger.info(f"starting thread to blinking led {led}")
         return _thread.start_new_thread(self._blink_led, (led, SP_TIME[speed]))
 
     def stop_blink_led(self, led):
         self.logger.info(f"stoping blinking led {led}")
         if not led in self._lock_led.keys():
-            self.logger(f"led {led} not found!!! aborting...")
+            self.logger.info(f"led {led} not found!!! aborting...")
         if not self._lock_led[led]:
-            self.logger(f"led already stoped {led}!!!")
+            self.logger.info(f"led already stoped {led}!!!")
             return
         self._lock_led[led] = False
 
