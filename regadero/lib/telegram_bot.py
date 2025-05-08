@@ -41,14 +41,15 @@ class TelegramBot():
 
     def get_me(self):
         data = self._do_get('getMe')
+        self.logger.info(f"bot {data['first_name']} started successfull")
         return data['username'], data['first_name'], data['id']
 
 
     def get_updates(self):
         # we should grab the last data here
-        return self.do_get('getUpdates')
+        return self._do_get('getUpdates')
 
-    def ok_to_last_message(self, msg_id):
+    def ok_to_last_message(self):
 
         updates = self.get_updates()
 

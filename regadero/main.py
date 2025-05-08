@@ -8,6 +8,7 @@ from logger import Logger
 
 from gpio_manager import GpioManager
 from wifi_manager import configure_wifi
+from telegram_bot import TelegramBot
 from utils import datetime
 
 
@@ -29,6 +30,9 @@ logger.info("configuring local time")
 ntptime.host = "1.europe.pool.ntp.org"
 ntptime.settime()
 logger.info(f"  > time is {datetime.datetime()}")
+
+tbot = TelegramBot(SETTINGS['vars']['telegram_token'])
+
 
 app = Microdot()
 Response.default_content_type = 'text/html'
