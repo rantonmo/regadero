@@ -66,7 +66,7 @@ class GpioManager():
             return
 
         self._lock_led[led] = True
-        self.logger.info(f"starting thread to blinking led {led}")
+        self.logger.info(f"starting thread to blinking led {led} - {speed} ({SP_TIME[speed]})")
         return _thread.start_new_thread(self._blink_led, (led, SP_TIME[speed]))
 
     def stop_blink_led(self, led):
