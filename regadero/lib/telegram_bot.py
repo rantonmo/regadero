@@ -3,22 +3,34 @@ import requests
 
 from logger import Logger
 
+EMOJIS = {
+    'ok': "👍",
+    'nooo': "😱",
+    'cry': "😭"
+}
 
 class TelegramBot():
 
     base_url = None
-    logger = None
+    chat_id = None  # chat to send messages
+    headers = None
 
-    main_chat = None  # chat to send updates
+    logger = None
 
     username = None
     first_name = None
     id = None
 
-    def __init__(self, token):
+    def __init__(self, token, chat_id=None):
 
         self.base_url = f"https://api.telegram.org/bot{token}"
+        self.chat_id = chat_id
+        self.headers = {
+            'Content-Type': 'application/json'
+        }
+
         self.logger = Logger(name='bot')
+
         (self.username, self.first_name, self.id) = self.get_me()
 
 
@@ -33,7 +45,8 @@ class TelegramBot():
 
     def _do_post(self, path, data=None):
         self.logger.info(f"doing post to {path} - {data}")
-        resp = requests.post(f"{self.base_url}/{path}", json=data)
+        resp = requests.post(f"{self.base_url}/{path}",
+                             json=data, headers=self.headers)
         if resp.status_code != 200:
             self.logger.error(f"Error doing post: {resp.content}")
             return False
@@ -43,7 +56,6 @@ class TelegramBot():
         data = self._do_get('getMe')
         self.logger.info(f"bot {data['first_name']} started successfull")
         return data['username'], data['first_name'], data['id']
-
 
     def get_updates(self):
         # we should grab the last data here
@@ -66,3 +78,15 @@ class TelegramBot():
 
         return self._do_post('setMessageReaction', data)
 
+    def send_message(self, message, notify=True):
+
+        if not self.chat_id:
+            self.logger.error("No default chat configured. Aborting...")
+            return
+        data = {
+            "chat_id": self.chat_id,
+            "text": message,
+            "disable_notification": not notify
+        }
+
+        return self._do_post('sendMessage', message, data)

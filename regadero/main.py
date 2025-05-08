@@ -22,7 +22,6 @@ if gpm:
     gpm.blink_led('red', 3, 0.5)
 
 wlan = configure_wifi(SETTINGS['wifi'])
-
 if wlan:
     gpm.blink_led('blue')
 
@@ -32,7 +31,6 @@ ntptime.settime()
 logger.info(f"  > time is {datetime.datetime()}")
 
 tbot = TelegramBot(SETTINGS['vars']['telegram_token'])
-
 
 app = Microdot()
 Response.default_content_type = 'text/html'
