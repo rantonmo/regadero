@@ -1,9 +1,18 @@
 from logger import Logger
 from machine import Pin
 from time import sleep as t_sleep
+import _thread
+
+SP_TIME = {
+    "fast": 0.15,
+    "normal": 0.25,
+    "slow": 0.5,
+    "sslow": 1
+}
 
 class GpioManager():
     leds = {}
+    _lock_led = {}
     buttons = {}
     buzz = None
 
@@ -16,10 +25,14 @@ class GpioManager():
             self.logger.info(f"{item} - {_settings[item]}")
             if _settings[item]["type"] == "buzzer":
                 self.buzz = Pin(_settings[item]["pin"], Pin.OUT, value=0, drive=Pin.DRIVE_0)
+
             elif _settings[item]["type"] == "led":
                 self.leds[item.lower()] = Pin(_settings[item]["pin"], Pin.OUT, value=0, drive=Pin.DRIVE_0)
+                self.l_ock_led[item.lower()] = False
+
             elif _settings[item]["type"] == "button":
                 self.buttons[item.lower()] = Pin(_settings[item]["pin"], Pin.IN, Pin.PULL_DOWN)
+
             else:
                 self.logger.info(f"Error: unknow gpio type: {_settings[item]['type']}", )
 
@@ -33,7 +46,37 @@ class GpioManager():
             for __i in range(0, times):
                 self.leds[led].toggle()
                 t_sleep(sleep)
-            self.leds[led].off()  # always ends off
+            self.leds[led].off()
+
+
+    def _blink_led(self, led, sleep=0.25):  # default 3 seconds -> 0.25 * 12
+        self.logger.info(f"blinking led {led} - {sleep}")
+        if led in self.leds:
+            while self._lock_led[led]:
+                self.leds[led].toggle()
+                t_sleep(sleep)
+            self.leds[led].off()
+
+    def start_blink_led(self, led, speed="normal"):
+        if not led in self._lock_led.keys():
+            self.logger(f"led {led} not found!!! aborting...")
+            return
+        if self._lock_led[led]:
+            self.logger(f"led {led} is locked!!! aborting...")
+            return
+
+        self.lock_led[led] = True
+        self.logger(f"starting thread to blinking led {led}")
+        return _thread.start_new_thread(self._blink_led, (led, SP_TIME[speed]))
+
+    def stop_blink_led(self, led):
+        self.logger.info(f"stoping blinking led {led}")
+        if not led in self._lock_led.keys():
+            self.logger(f"led {led} not found!!! aborting...")
+        if not self._lock_led[led]:
+            self.logger(f"led already stoped {led}!!!")
+            return
+        self._lock_led[led] = False
 
     def led_on(self, led):
         self.logger.info(f"set led {led} on")
