@@ -30,7 +30,8 @@ ntptime.host = "1.europe.pool.ntp.org"
 ntptime.settime()
 logger.info(f"  > time is {datetime.datetime()}")
 
-tbot = TelegramBot(SETTINGS['vars']['telegram_token'])
+tbot = TelegramBot(SETTINGS['telegram']['token'],
+                   SETTINGS['telegram']['chat_id'])
 
 app = Microdot()
 Response.default_content_type = 'text/html'
