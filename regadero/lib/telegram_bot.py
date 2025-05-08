@@ -43,7 +43,7 @@ class TelegramBot():
             return
         return resp.json().get('result')
 
-    def _do_post(self, path, data=None):
+    def _do_post(self, path, data=None, files=None):
         self.logger.info(f"doing post to {path} - {data}")
         resp = requests.post(f"{self.base_url}/{path}",
                              json=data, headers=self.headers)
@@ -79,7 +79,6 @@ class TelegramBot():
         return self._do_post('setMessageReaction', data)
 
     def send_message(self, message, notify=True):
-
         if not self.chat_id:
             self.logger.error("No default chat configured. Aborting...")
             return
@@ -88,5 +87,18 @@ class TelegramBot():
             "text": message,
             "disable_notification": not notify
         }
-
         return self._do_post('sendMessage', message, data)
+
+    def send_image(self, message):
+
+        files = {
+            "photo": open('/img/favicon.png', 'rb')
+        }
+
+        data = {
+           "chat_id": self.chat_id,
+            "caption": message,
+            "disable_notification": False
+        }
+        return self._do_post(f'sendPhoto?chat_id={self.chat_id}',
+                             data, files)
