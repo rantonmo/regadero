@@ -54,7 +54,7 @@ class GpioManager():
                     if type(_settings[item]["drive"]) == int and _settings[item]["drive"] < 4:
                         _drive = _settings[item]["drive"]
                     else:
-                        self.logger.warning(f" - wrong drive {_settings[item]["drive"]} in settings for led {item}")
+                        self.logger.warning(f" - wrong drive value in settings for led {item}: {_settings[item]["drive"]}")
                 else:
                     _drive = Pin.DRIVE_0
                 self.leds[item.lower()] = Pin(_settings[item]["pin"], Pin.OUT, value=0, drive=_drive)
