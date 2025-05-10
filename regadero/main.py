@@ -17,7 +17,7 @@ logger = Logger()
 logger.info("getting settings")
 SETTINGS = json_loads(open('settings.json', 'r').read())
 
-gpm = GpioManager(SETTINGS["PINS"])
+gpm = GpioManager(SETTINGS["pins"])
 if gpm:
     gpm.blink_led('red', 3, 0.5)
 

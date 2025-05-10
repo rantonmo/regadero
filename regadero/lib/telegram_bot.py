@@ -90,16 +90,16 @@ class TelegramBot():
         }
         return self._do_post('sendMessage', data)
 
-    # def send_image(self, message):
+    def send_image(self, image_path, message=''):
 
-    #     files = {
-    #         "photo": open('/img/favicon.png', 'rb')
-    #     }
+        files = {
+            "photo": open(image_path, 'rb')
+        }
 
-    #     data = {
-    #        "chat_id": self.chat_id,
-    #         "caption": message,
-    #         "disable_notification": False
-    #     }
-    #     return self._do_post(f'sendPhoto?chat_id={self.chat_id}',
-    #                          data, files)
+        data = {
+           "chat_id": self.chat_id,
+            "caption": message,
+            "disable_notification": False
+        }
+        return self._do_post(f'sendPhoto?chat_id={self.chat_id}',
+                             data, files)
