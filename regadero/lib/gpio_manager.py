@@ -53,7 +53,7 @@ class GpioManager():
                 if 'drive' in _settings[item]:
                     if type(_settings[item]["drive"]) == int and _settings[item]["drive"] < 4:
                         _drive = _settings[item]["drive"]
-                        self.logger.info(f" - setting drive {_drive} for led {item}")
+                        self.logger.info(f" - setting drive {_drive} for led {item}: {_settings[item]["drive"]}")
                     else:
                         self.logger.warning(f" - wrong drive {_drive} in settings for led {item}")
                 else:
