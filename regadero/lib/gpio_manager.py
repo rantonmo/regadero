@@ -53,9 +53,8 @@ class GpioManager():
                 if 'drive' in _settings[item]:
                     if type(_settings[item]["drive"]) == int and _settings[item]["drive"] < 4:
                         _drive = _settings[item]["drive"]
-                        self.logger.info(f" - setting drive {_drive} for led {item}: {_settings[item]["drive"]}")
                     else:
-                        self.logger.warning(f" - wrong drive {_drive} in settings for led {item}")
+                        self.logger.warning(f" - wrong drive {_settings[item]["drive"]} in settings for led {item}")
                 else:
                     _drive = Pin.DRIVE_0
                 self.leds[item.lower()] = Pin(_settings[item]["pin"], Pin.OUT, value=0, drive=_drive)
@@ -127,6 +126,8 @@ class GpioManager():
         self._lock_led[led] = False
 
     def led_toggle(self, led):
+        if not led:
+            self.logger.error("toggle needs a led to be toggled. Aborting")
         self.logger.info(f"toggle led {led}")
         if led in self.leds:
             self.leds[led].toggle()
