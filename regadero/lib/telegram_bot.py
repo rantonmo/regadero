@@ -46,7 +46,8 @@ class TelegramBot():
     def _do_post(self, path, data=None, files=None):
         self.logger.info(f"doing post to {path} - {data}")
         resp = requests.post(f"{self.base_url}/{path}",
-                             json=data,#  files=files,
+                             json=data,
+                             #  files=files,  # this is for normal python
                              headers=self.headers)
         if resp.status_code != 200:
             self.logger.error(f"Error doing post: {resp.content}")
@@ -92,14 +93,16 @@ class TelegramBot():
 
     def send_image(self, image_path, message=''):
 
-        files = {
-            "photo": open(image_path, 'rb')
-        }
+        # this is for normal python
+        # files = {
+        #     "photo": open(image_path, 'rb')
+        # }
 
         data = {
            "chat_id": self.chat_id,
             "caption": message,
-            "disable_notification": False
+            "disable_notification": False,
+            "photo": open(image_path, 'rb')
         }
         return self._do_post(f'sendPhoto?chat_id={self.chat_id}',
-                             data, files)
+                             data)  #, files) --> this is for normal python
