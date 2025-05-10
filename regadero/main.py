@@ -1,8 +1,6 @@
+# main - telegram bot
 from json import loads as json_loads
 import ntptime
-
-from microdot import Microdot, Response
-from microdot.utemplate import Template
 
 from logger import Logger
 
@@ -19,7 +17,7 @@ SETTINGS = json_loads(open('settings.json', 'r').read())
 
 gpm = GpioManager(SETTINGS["pins"])
 if gpm:
-    gpm.blink_led('red', 3, 0.5)
+    gpm.blink_led('red')
 
 wlan = configure_wifi(SETTINGS['wifi'])
 if wlan:
@@ -33,33 +31,3 @@ logger.info(f"  > time is {datetime.datetime()}")
 tbot = TelegramBot(SETTINGS['telegram']['token'],
                    SETTINGS['telegram']['chat_id'])
 
-app = Microdot()
-Response.default_content_type = 'text/html'
-
-@app.route('/', methods=['GET', 'POST'])
-async def index(req):
-    if req.method == 'POST':
-        led = req.form.get('led')
-        action = req.form.get('action')
-        if action == 'blink':
-            gpm.blink_led(led)
-        elif action == "on":
-            gpm.led_on(led)
-        elif action == "off":
-            gpm.led_off(led)
-
-    return Template('index.html').render(page="index")
-
-@app.route('/program')
-async def index(req):
-    return Template('program.html').render(page='program')
-
-@app.route('/wether')
-async def index(req):
-    return Template('wether.html').render(page='wether')
-
-@app.route('/system')
-async def page2(req):
-    return Template('system.html').render(page='system')
-
-app.run(debug=True, port=8080)
