@@ -58,7 +58,7 @@ class GpioManager():
                         self.logger.warning(f" - wrong drive {_drive} in settings for led {item}")
                 else:
                     _drive = Pin.DRIVE_0
-                self.leds[item.lower()] = Pin(_settings[item]["pin"], Pin.OUT, value=0, drive=Pin.DRIVE_0)
+                self.leds[item.lower()] = Pin(_settings[item]["pin"], Pin.OUT, value=0, drive=_drive)
                 self._lock_led[item.lower()] = False
 
             elif _settings[item]["type"] == "button":
