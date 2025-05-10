@@ -15,6 +15,9 @@ A simple irrigation system.
 * **ampy:** `ampy -p /dev/tty.usbserial-1410 put max7219.py`
 * **rshell** `rshell -p /dev/ttyUSB0 --editor vi --buffer-size=30`
 
+_note:_ to edit files with rshell use the command `edit`, rshell will retreive the file and use the editor configured with the option `--editor`, and then update it:
+
+
 ## Connection
 `screen /dev/ttyUSB0 115200`
 
