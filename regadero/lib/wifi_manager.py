@@ -21,7 +21,7 @@ def configure_wifi(wificonfig:dict, maxtry=40) -> N_WLAN:
         if wlan.isconnected():
             break
         logger.info("  [%3s/%s] connecting to wifi %s - %s" % (__i, maxtry, wificonfig['essid'], wlan.isconnected()))
-        t_sleep(0.5)
+        t_sleep(1)
         __i += 1
 
     if wlan.isconnected():
