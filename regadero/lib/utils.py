@@ -21,12 +21,12 @@ class datetime():
     @staticmethod
     def datetime():
         year, month, day, hour, minute, second, weekday, yearday = localtime()
-        return f"{year}-{month}-{day}T{hour + 2}:{minute}:{second}"
+        return f"{year}-{month}-{day}T{hour}:{minute}:{second}"
 
     @staticmethod
     def time():
         year, month, day, hour, minute, second, weekday, yearday = localtime()
-        return f"{hour + 2}:{minute}:{second}"
+        return f"{hour}:{minute}:{second}"
 
     @staticmethod
     def date():

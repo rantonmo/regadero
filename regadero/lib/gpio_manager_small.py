@@ -9,7 +9,7 @@ SP_TIME = {
     "sslow": 1
 }
 
-def blink(led:Pin, sleep:float=0.125, speed:str=None, time:int=1, off_value:int=1) -> None:
+def blink(led:Pin, sleep:float=0.125, speed:str=None, time:int=1, off_value:int=0) -> None:
     """
     Blink a led connected to the Pin _led
 
