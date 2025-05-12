@@ -6,8 +6,12 @@
 
 ### get current time:
 
+**Current datetime in datetime object:**
 * time.localtime()
 * time.gmtime()
+
+**Current datetime in seconds:**
+* time.mktime(time.localtime())
 
 ### get datetime object of a specific date
 
