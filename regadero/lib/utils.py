@@ -1,7 +1,7 @@
 
 from json import loads as j_loads
 from os import stat as os_stat
-from time import localtime
+from time import localtime as t_localtime
 def f_exists(path) -> bool:
     try:
         if os_stat(path):
@@ -9,22 +9,17 @@ def f_exists(path) -> bool:
     except OSError:
         return False
 
-class datetime():
+def datetime(custom_time=None):
+    year, month, day, hour, minute, second, weekday, yearday = t_localtime(custom_time)
+    return f"{year}-{month:02d}-{day:02d}T{hour:02d}:{minute:02d}:{second:02d}"
 
-    @staticmethod
-    def datetime():
-        year, month, day, hour, minute, second, weekday, yearday = localtime()
-        return f"{year}-{month}-{day}T{hour}:{minute}:{second}"
+def time(custom_time=None):
+    year, month, day, hour, minute, second, weekday, yearday = t_localtime(custom_time)
+    return f"{hour:02d}:{minute:02d}:{second:02d}"
 
-    @staticmethod
-    def time():
-        year, month, day, hour, minute, second, weekday, yearday = localtime()
-        return f"{hour}:{minute}:{second}"
-
-    @staticmethod
-    def date():
-        year, month, day, hour, minute, second, weekday, yearday = localtime()
-        return f"{year}-{month}-{day}"
+def date(custom_time=None):
+    year, month, day, hour, minute, second, weekday, yearday = t_localtime(custom_time)
+    return f"{year}-{month:02d}-{day:02d}"
 
 # this class is not running here in micropython
 class json_data():

@@ -8,14 +8,14 @@ class Logger():
     path = None
     name = None
 
-    def __init__(self, filename="regadero.log", path="logs", name="root"):
+    def __init__(self, name="root", filename="regadero.log", path="logs"):
         self.filename = filename
         self.path = path
         self.name = name
         if name == "root":
             self.rotate_old_logs()
 
-        self.info("Logger initized")
+        self.info(f"Logger {name} initized")
 
     def rotate_old_logs(self):
         if f_exists(f"{self.path}/{self.filename}.1"):
@@ -52,3 +52,5 @@ class Logger():
             _file += f".{num}"
         with open(_file, 'r') as f:
             print(f.read())
+
+    __call__ = info
