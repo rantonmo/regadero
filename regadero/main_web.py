@@ -1,3 +1,4 @@
+
 import ntptime
 
 from json import loads as json_loads
@@ -24,7 +25,7 @@ if gpm:
     gpm.blink_led('red', 3, 0.5)
 
 wlan = configure_wifi(SETTINGS['wifi'])
-if wlan:
+if wlan and wlan.isconnected():
     gpm.blink_led('blue')
 
 logger.info("configuring local time")
