@@ -47,13 +47,12 @@ logger.info(f"  > time adjusted is {datetime()}")
 # tbot.send_message("regadero (testing) has been initialized")
 
 
-# programs = [Program(x) for x in data("programs")]
+programs = [Program(x) for x in data("programs")]
 
+for prog in programs:
+    prog.start()
 
-logger.info("Configuring program %s" % data("programs.0"))
-
-prog = Program(data("programs.0"))
-
-logger.info(f" program {prog.name} will be executed at {datetime(prog.next_run_datetime)}")
-
+# logger.info("Configuring program %s" % data("programs.0"))
+# prog = Program(data("programs.0"))
+# logger.info(f" program {prog.name} will be executed at {datetime(prog.next_run_datetime)}")
 # prog.start_program()

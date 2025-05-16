@@ -36,6 +36,9 @@ class Logger():
         with open(f"{self.path}/{self.filename}", "a") as f:
             f.write(_msg + "\n")
 
+    def debug(self, message):
+        self.emit(message, "DEBUG")
+
     def info(self, message):
         self.emit(message, "INFO")
 
