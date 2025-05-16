@@ -56,4 +56,4 @@ prog = Program(data("programs.0"))
 
 logger.info(f" program {prog.name} will be executed at {datetime(prog.next_run_datetime)}")
 
-prog.start_program()
+# prog.start_program()

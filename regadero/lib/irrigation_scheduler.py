@@ -13,6 +13,9 @@ class Program():
     wether_adjustment:bool = False
     run_time:int = None
 
+    enabled = True
+    wait_time = 1 * 60
+
     def __init__(self, program:dict) -> None:
         """
         program dict properties:
@@ -49,10 +52,10 @@ class Program():
         self.logger.info(f"  > wether_adjustment: {self.wether_adjustment}")
         self.logger.info(f"  > run_time: {self.run_time}")
 
-        self.next_run_datetime = self.get_next_run_datetime()
+        self.set_next_run_datetime()
 
 
-    def get_next_run_datetime(self):
+    def set_next_run_datetime(self):
         (Y, M, D, h, m, s, wd, yd) = t_localtime()
 
         now = (Y, M, D, h, m, s, None, None)
@@ -60,25 +63,28 @@ class Program():
 
         self.logger.info(f"run time is {self.schedule_time['H']}:{self.schedule_time['M']}")
         next_run = (Y, M, D, self.schedule_time['H'], self.schedule_time['M'], 0, None, None)
-        # next_run = now = (Y, M, D, 2, 0, 0, None, None)
         self.logger.info(f" nex run  will be at {datetime(t_mktime(next_run))}")
 
         self.next_run_datetime = t_mktime(next_run)
         if t_mktime(now) > t_mktime(next_run):
+            self.next_run_datetime += 86400
             self.logger.info(f"next run time will be tomorrow")
-            self.next_run_datetime = self.next_run_datetime + 86400
 
         self.logger.info(f"next run is at {datetime(self.next_run_datetime)}")
 
 
     def start_program(self):
-        self.logger.info("Starting program %s" % self.name)
+        self.logger.info("Starting program '%s'" % self.name)
 
-
-        while True:
-            now = t_mktime(t_localtime())
-            self.logger.info(f" - checking program {self.name} at {datetime(now)}")
-            self.logger.info(f"  >> next run is at {datetime(self.next_run_datetime)}")
-            if  now > self.next_run_datetime:
-                self.logger.info(f"time to run program: {datetime(now)}")
-            t_sleep(1 * 60)
+        while self.enabled:
+            (Y, M, D, h, m, s, wd, yd) = t_localtime()
+            now = t_mktime((Y, M, D, h, m, s, wd, None))
+            self.logger.info(f"  >> checking program '{self.name}' at ({now}) {datetime(now)}")
+            self.logger.info(f"  >> next run is at ({self.next_run_datetime}) {datetime(self.next_run_datetime)} on days {self.week_days}")
+            if  now > self.next_run_datetime and f"{wd}" in self.week_days:
+                self.logger.info(f"Running program at {datetime(now)}!!")
+                self.logger.info("Doing cool staff!!!!!")
+                self.set_next_run_datetime()
+                self.logger.info(f"next run will be at ({self.next_run_datetime}) {datetime(self.next_run_datetime)}")
+            t_sleep(self.wait_time)
+        self.logger.info(f"Program '{self.name}' stoped!")
