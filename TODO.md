@@ -1,4 +1,5 @@
 # TODO list
 
-* Class to manage output ports
+* TBOT feat: markup templating
+* PROGRAM feat: parser `every` field
 
