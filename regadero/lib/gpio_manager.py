@@ -126,6 +126,7 @@ class GpioManager():
             self.logger.info(f"led already stoped {led}!!!")
             return
         self._lock_led[led] = False
+        self.leds[led].off()
 
     def led_toggle(self, led):
         if not led:

@@ -2,12 +2,17 @@ from time import localtime as t_localtime, mktime as t_mktime, sleep as t_sleep
 
 import _thread
 
+from gpio_manager import GpioManager
 from logger import Logger
+from telegram_bot import TelegramBot
 from utils import datetime
 
 class Program():
 
     logger = None
+    gpio = None
+    bot = None
+    bot_errors = 0
 
     name:str = None
     schedule_time:dict = None
@@ -21,22 +26,28 @@ class Program():
     executing = False
     wait_time = 1 * 60
 
-    def __init__(self, program:dict) -> None:
+    def __init__(self, program:dict, gpio:GpioManager, bot:TelegramBot=None) -> None:
         """
         program dict properties:
 
             * every (str): [NUM] DAY|HOUR
             * name (str): name for the program
             * schedule_time (str with format HH:MM): time for the program to start
-            * week_days (str with format, defualt: LMXJVSD): week days for the program to start
+            * week_days (str with format, defualt: 0123456): week days for the program to start
             * wether_adjustment (bool default true): adjust times with prediccion data
             * time (int): time in minutes to be used as default value on the zones.
             * zones (list[dict]): Zone specification
 
-        zone dict properties:
-            * name (str): name of the zone
-            * time (int): Time in minutes for the zone to run
-            * enabled (bool, default false): if the irrigation is enabled on this zone.
+            zone dict properties:
+                * name (str): name of the zone
+                * time (int): Time in minutes for the zone to run
+                * enabled (bool, default false): if the irrigation is enabled on this zone.
+
+        gpio GpioManager: object to manage leds, switches and buzzer
+
+        bot TelegramBot (optionas): To send Telegram notifications
+
+
         """
 
         self.logger = Logger("program")
@@ -52,6 +63,12 @@ class Program():
         self.run_time = program.get('run_time', 0)
         self.zones = program['zones']
 
+        if bot:
+            self.bot = bot
+            self.logger.debug("bot is enabled")
+
+        self.gpio = gpio
+
         self.logger.info("program is: %s" % program)
         self.logger.info(f"program '{self.name}' basic config:")
         self.logger.info(f"  > schedule_time: {self.schedule_time}")
@@ -59,9 +76,23 @@ class Program():
         self.logger.info(f"  > wether_adjustment: {self.wether_adjustment}")
         self.logger.info(f"  > run_time: {self.run_time}")
         self.logger.info(f"  > {len(self.zones)} zones loaded")
-
         self.set_next_run_datetime()
+        self.logger.info("program has been initialized")
 
+    def notify(self, message, notify=True):
+
+        self.logger.info(f"NOTIFY: {message}")
+        if self.bot:
+            try:
+                self.bot.send_message(
+                    message, notify=notify)
+                self.bot_errors = 0
+            except OSError as exc:
+                self.logger.error(f"Error sending telegram message: {exc}")
+                self.bot_errors += 1
+                if self.bot_errors > 5:
+                    self.bot = None
+                    self.logger.error("too many errors using bot! Disabling...")
 
     def set_next_run_datetime(self):
         (Y, M, D, h, m, s, wd, yd) = t_localtime()
@@ -75,7 +106,6 @@ class Program():
 
         self.next_run_datetime = t_mktime(next_run)
         if t_mktime(now) > t_mktime(next_run):
-            ## always executed every day for now:
             self.next_run_datetime += 86400
             self.logger.info(f"next run time will be tomorrow")
 
@@ -85,12 +115,14 @@ class Program():
         self.logger.info("Start irrigation of program %s" % self.name)
         for zone in self.zones:
             if zone.get('enabled', True):
-                self.logger.info(f"  >> Starting irrigation on zone {zone['name']} during: {zone.get('run_time', self.run_time)} minutes")
-                # do whatever to enable irrigation
-                t_sleep(zone.get('run_time', self.run_time))
-                self.logger.info(f"  << Irrigation on zone {zone['name']} finish")
+                self.notify(f"  >> Starting irrigation on zone {zone['name']} "
+                            f"during: {zone.get('run_time', self.run_time)} minutes")
+                self.gpio.start_blink_led('blue', 'sfast')
+                t_sleep(60 * zone.get('run_time', self.run_time))
+                self.gpio.stop_blink_led('blue')
+                self.notify(f"  << Irrigation on zone {zone['name']} finish")
             else:
-                self.logger.info(f"  -- Irrigation on zone {zone['name']} is disabled")
+                self.notify(f"  -- Irrigation on zone {zone['name']} is disabled")
         self.logger.info("Irrigation of program %s finished!!" % self.name)
 
 
@@ -103,20 +135,25 @@ class Program():
         while not self.stopped and self.enabled:
             (Y, M, D, h, m, s, wd, yd) = t_localtime()
             now = t_mktime((Y, M, D, h, m, s, wd, None))
-            self.logger.debug(f"  >> checking program '{self.name}' - next run is at {datetime(self.next_run_datetime)} on days {self.week_days}")
+            self.logger.debug(f"  >> checking program '{self.name}' - "
+                              f"next run is at {datetime(self.next_run_datetime)} "
+                              f"- on days {self.week_days}")
             if  now > self.next_run_datetime and f"{wd}" in self.week_days:
-                self.logger.info(f"Running program at {datetime(now)}!!")
+                self.notify(f"Running program {self.name}")
                 self.executing = True
                 self.irrigation()
                 self.executing = False
                 self.set_next_run_datetime()
-                self.logger.debug(f"next run will be at ({self.next_run_datetime}) {datetime(self.next_run_datetime)}")
+                self.notify(f"End run program {self.name} - next run "
+                            f"at {datetime(self.next_run_datetime)} on days {self.week_days}")
             t_sleep(self.wait_time)
-        self.logger.warning(f"Program '{self.name}' has been  stopped or disabled!! {self.stopped} {self.enabled}")
+        self.notify(f"Program '{self.name}' has been stopped or disabled!!"
+                    f" stopped: {self.stopped} enabled: {self.enabled}")
 
     def start(self):
+        self.notify(f"program {self.name} started - next run: {datetime(self.next_run_datetime)}")
         return _thread.start_new_thread(self.run_schedule, ())
 
     def stop(self):
-        self.logger.warning("Stoping program %s!!" % self.name)
+        self.notify(f"Stopping program {self.name}!!")
         self.stopped = True

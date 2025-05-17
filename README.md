@@ -50,3 +50,17 @@ _note:_ to edit files with rshell use the command `edit`, rshell will retreive t
 # Schedule
 
 https://github.com/rguillon/schedule
+
+# Memory management - gc
+
+* [memory collector - gc](https://docs.micropython.org/en/latest/library/gc.html)
+
+```
+>>> import gc
+>>> gc.collect()
+>>> gc.mem_free()
+101696
+>>> gc.mem_alloc()
+24128
+```
+

@@ -21,7 +21,7 @@ class TelegramBot():
     first_name = None
     id = None
 
-    timeout = 90
+    timeout = 15
 
     last_update_date = None
 
@@ -29,9 +29,7 @@ class TelegramBot():
 
         self.base_url = f"https://api.telegram.org/bot{token}"
         self.chat_id = chat_id
-        self.headers = {
-            'Content-Type': 'application/json'
-        }
+        self.headers = {'Content-Type': 'application/json'}
 
         self.logger = Logger(name='bot')
 
@@ -47,8 +45,11 @@ class TelegramBot():
         resp = requests.get(f"{self.base_url}/{path}", timeout=self.timeout)
         if resp.status_code != 200:
             self.logger.error(f"Error doing get: {resp.content}")
+            resp.close()
             return
-        return resp.json().get('result')
+        result = resp.json().get('result')
+        resp.close()
+        return result
 
     def _do_post(self, path, data=None):
 
@@ -58,8 +59,11 @@ class TelegramBot():
                              headers=self.headers, timeout=self.timeout)
         if resp.status_code != 200:
             self.logger.error(f"Error doing post: {resp.content}")
+            resp.close()
             return False
-        return resp.json().get('result')
+        result = resp.json().get('result')
+        resp.close()
+        return result
 
     def get_me(self):
         data = self._do_get('getMe')
@@ -112,7 +116,7 @@ class TelegramBot():
 
         return self._do_post('setMessageReaction', data)
 
-    def send_message(self, message, notify=True):
+    def send_message(self, message, notify=False):
         if not self.chat_id:
             self.logger.error("No default chat configured. Aborting...")
             return
