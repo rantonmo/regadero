@@ -37,6 +37,7 @@ class GpioManager():
     leds = {}
     _lock_led = {}
     buttons = {}
+    switchs = {}
     buzz = None
 
     logger = None
@@ -62,7 +63,8 @@ class GpioManager():
 
             elif _settings[item]["type"] == "button":
                 self.buttons[item.lower()] = Pin(_settings[item]["pin"], Pin.IN, Pin.PULL_DOWN)
-
+            elif _settings[item]["type"] == "switch":
+                self.switchs[item.lower()] = Pin(_settings[item]["pin"], Pin.OUT, value=0)
             else:
                 self.logger.info(f"Error: unknow gpio type: {_settings[item]['type']}", )
 

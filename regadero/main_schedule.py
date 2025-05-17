@@ -4,7 +4,7 @@ from machine import RTC, Pin
 
 from logger import Logger
 from wifi_manager import configure_wifi
-from gpio_manager_small import blink
+from gpio_manager import GpioManager
 from telegram_bot import TelegramBot
 
 from irrigation_scheduler import Program
@@ -17,13 +17,13 @@ data = json_data(open('data.json', 'r').read())
 logger = Logger()
 
 logger.info("configuring onboard led")
-bled = Pin(2, Pin.OUT, drive=Pin.DRIVE_0)
-
+gpm = GpioManager(settings("pins"))
+if gpm:
+    gpm.blink_led('red')
 
 wlan = configure_wifi(settings('wifi'))
 if wlan and wlan.isconnected():
-    blink(bled)
-
+    gpm.blink_led('blue')
 
 logger.info("configuring local time")
 ntptime.host = "1.europe.pool.ntp.org"
@@ -36,13 +36,12 @@ rtc = RTC()
 rtc.datetime((Y, M, D, WD, h + 2, m, s, ss))
 logger.info(f"  > time adjusted is {datetime()}")
 
-# logger.info("Initializing Telegram bot")
-# tbot = TelegramBot(settings('telegram.token'),
-#                    settings('telegram.chat_id'))
-#                 #    SETTINGS['telegram']['group_chat_id'])
+logger.info("Initializing Telegram bot")
+tbot = TelegramBot(settings('telegram.token'),
+                   settings('telegram.chat_id'))
 
-# if tbot:
-#     blink(bled)
+if tbot:
+    gpm.blink_led('green')
 
 # tbot.send_message("regadero (testing) has been initialized")
 
