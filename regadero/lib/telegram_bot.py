@@ -112,7 +112,7 @@ class TelegramBot():
 
         return self._do_post('setMessageReaction', data)
 
-    def send_message(self, message, notify=True):
+    def send_message(self, message, notify=False):
         if not self.chat_id:
             self.logger.error("No default chat configured. Aborting...")
             return
