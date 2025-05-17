@@ -64,3 +64,6 @@ https://github.com/rguillon/schedule
 24128
 ```
 
+# flash space stats
+
+https://forums.raspberrypi.com/viewtopic.php?t=345314
