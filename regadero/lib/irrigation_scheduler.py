@@ -72,7 +72,7 @@ class Program():
         self.set_next_run_datetime()
         self.logger.info("program has been initialized")
 
-    def notify(self, message, notify=False):
+    def notify(self, message, notify=True):
 
         self.logger.info(f"NOTIFY: {message}")
         if self.bot:
@@ -119,19 +119,23 @@ class Program():
         while not self.stopped and self.enabled:
             (Y, M, D, h, m, s, wd, yd) = t_localtime()
             now = t_mktime((Y, M, D, h, m, s, wd, None))
-            self.logger.debug(f"  >> checking program '{self.name}' - next run is at {datetime(self.next_run_datetime)} on days {self.week_days}")
+            self.logger.debug(f"  >> checking program '{self.name}' - "
+                              f"next run is at {datetime(self.next_run_datetime)} "
+                              f"- on days {self.week_days}")
             if  now > self.next_run_datetime and f"{wd}" in self.week_days:
                 self.notify(f"Running program {self.name}")
                 self.executing = True
                 self.irrigation()
                 self.executing = False
                 self.set_next_run_datetime()
-                self.notify(f"End run program {self.name} - next run at {datetime(self.next_run_datetime)} on days {self.week_days}")
+                self.notify(f"End run program {self.name} - next run "
+                            f"at {datetime(self.next_run_datetime)} on days {self.week_days}")
             t_sleep(self.wait_time)
-        self.logger.warning(f"Program '{self.name}' has been  stopped or disabled!! {self.stopped} {self.enabled}")
+        self.notify(f"Program '{self.name}' has been stopped or disabled!!"
+                    f" stopped: {self.stopped} enabled: {self.enabled}")
 
     def start(self):
-        self.notify(f"program {self.name} started - next run: {self.next_run_datetime}")
+        self.notify(f"program {self.name} started - next run: {datetime(self.next_run_datetime)}")
         return _thread.start_new_thread(self.run_schedule, ())
 
     def stop(self):
