@@ -12,6 +12,7 @@ class Program():
     logger = None
     gpio = None
     bot = None
+    bot_errors = 0
 
     name:str = None
     schedule_time:dict = None
@@ -76,7 +77,16 @@ class Program():
 
         self.logger.info(f"NOTIFY: {message}")
         if self.bot:
-            self.bot.send_message(message, notify=notify)
+            try:
+                self.bot.send_message(
+                    message, notify=notify)
+                self.bot_errors = 0
+            except OSError as exc:
+                self.logger.error(f"Error sending telegram message: {exc}")
+                self.bot_errors += 1
+                if self.bot_errors > 5:
+                    self.bot = None
+                    self.logger.error("too many errors using bot! Disabling...")
 
     def set_next_run_datetime(self):
         (Y, M, D, h, m, s, wd, yd) = t_localtime()
