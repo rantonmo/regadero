@@ -38,12 +38,16 @@ class Program():
             * time (int): time in minutes to be used as default value on the zones.
             * zones (list[dict]): Zone specification
 
+            zone dict properties:
+                * name (str): name of the zone
+                * time (int): Time in minutes for the zone to run
+                * enabled (bool, default false): if the irrigation is enabled on this zone.
+
         gpio GpioManager: object to manage leds, switches and buzzer
+
         bot TelegramBot (optionas): To send Telegram notifications
-        zone dict properties:
-            * name (str): name of the zone
-            * time (int): Time in minutes for the zone to run
-            * enabled (bool, default false): if the irrigation is enabled on this zone.
+
+
         """
 
         self.logger = Logger("program")
@@ -62,6 +66,8 @@ class Program():
         if bot:
             self.bot = bot
             self.logger.debug("bot is enabled")
+
+        self.gpio = gpio
 
         self.logger.info("program is: %s" % program)
         self.logger.info(f"program '{self.name}' basic config:")
@@ -112,7 +118,7 @@ class Program():
                 self.notify(f"  >> Starting irrigation on zone {zone['name']} "
                             f"during: {zone.get('run_time', self.run_time)} minutes")
                 self.gpio.start_blink_led('blue', 'sfast')
-                t_sleep(zone.get('run_time', self.run_time))
+                t_sleep(60 * zone.get('run_time', self.run_time))
                 self.gpio.stop_blink_led('blue')
                 self.notify(f"  << Irrigation on zone {zone['name']} finish")
             else:
