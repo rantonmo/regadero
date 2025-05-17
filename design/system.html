@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <title>Regadero - basic irrigation system - {{ page }}</title>
+  </head>
+  <body class="bg-body-tertiary">
+
+    <header class="container-fluid bg-secondary d-flex p-2">
+      <img src="img/water-drop3.png" alt="Regadero by Rodri" width="50" height="50" class="d-inline-block">
+      <p class="w-50 m-1 p-2 text-light fs-5 fw-bold">Regadero - Basic Irrigation System</p>
+      <a class="w-50 m-1 p-2 text-white fs-6 text-end text-decoration-none" href="#"><i>-superadmin-</i>&nbsp;&nbsp;rmoreno logout</a>
+      <!--a class="w-50 m-1 p-2 text-white fs-6 text-end" href="#">Log-In</a-->
+    </header>
+    <div class="py-2 bg-body-secondary">
+        <!-- Start Navbar -->
+        <div class="container-sm justify-content-center bg-primary bg-opacity-25 rounded">
+          <ul class="nav nav-pills justify-content-center">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/program">Program</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/wether">Wether</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/system">System</a>
+            </li>
+          </ul>
+        </div>
+        <!-- END Navbar -->
+
+      <div class="container">
+      <!-- start page content -->
+
+      <h1 class="text-secondary tw-bold">System details</h1>
+
+      <ul class="list-group w-50 pt-4">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          wlan details
+          <span class="badge bg-warning">ESSID - 1.1.1.1 - db</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Init container version
+          <span class="badge bg-primary">2.9.3</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Replicas
+          <span class="badge bg-info">3</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          VolumeCapacity
+          <span class="badge bg-secondary">128Gi</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Resource limits
+          <span class="badge bg-success">800m/4Gi</span>
+        </li>
+      </ul>
+
+
+
+      <!-- END page content -->
+
+      <!-- footer -->
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js" integrity="sha384-VQqxDN0EQCkWoxt/0vsQvZswzTHUVOImccYmSyhJTp7kGtPed0Qcx8rK9h9YEgx+" crossorigin="anonymous"></script>
+
+      <footer class="footer mt-4 py-3 bg-dark-subtle">
+        <div>
+            <p class="text-center mb-0">
+                <a href="#" target="_blank" class="text-decoration-none">
+                <span class="text-muted">github project</span></a> |
+                <a href="#" class="text-decoration-none"><span class="text-muted">Project Documentation</a></span>&nbsp;|
+                <a href="#" onclick="window.open(this.href, '_blank'); return false;" class="text-decoration-none"><span class="text-muted">version-001</span></a>
+            </p>
+        </div>
+      </footer>
+    </div> <!-- bg-color -->
+  </body>
+</html>
