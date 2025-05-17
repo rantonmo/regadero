@@ -50,7 +50,7 @@ if tbot:
     gpm.blink_led('green')
 
 tbot.send_message("regadero (testing) has been initialized", notify=False)
-programs = [Program(x) for x in data("programs")]
+programs = [Program(x, gpm, tbot) for x in data("programs")]
 
 for prog in programs:
     prog.start()
