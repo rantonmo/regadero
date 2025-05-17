@@ -21,7 +21,7 @@ class TelegramBot():
     first_name = None
     id = None
 
-    timeout = 90
+    timeout = 15
 
     last_update_date = None
 
@@ -29,9 +29,7 @@ class TelegramBot():
 
         self.base_url = f"https://api.telegram.org/bot{token}"
         self.chat_id = chat_id
-        self.headers = {
-            'Content-Type': 'application/json'
-        }
+        self.headers = {'Content-Type': 'application/json'}
 
         self.logger = Logger(name='bot')
 
