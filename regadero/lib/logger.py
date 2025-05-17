@@ -1,6 +1,8 @@
 
 from os import rename as f_rename, listdir
-from utils import f_exists
+from utils import f_exists, datetime
+
+LOGGERS = []
 
 class Logger():
 
@@ -8,14 +10,15 @@ class Logger():
     path = None
     name = None
 
-    def __init__(self, filename="regadero.log", path="logs", name="root"):
+    def __init__(self, name="root", filename="regadero.log", path="logs"):
         self.filename = filename
         self.path = path
         self.name = name
         if name == "root":
             self.rotate_old_logs()
 
-        self.info("Logger initized")
+        LOGGERS.append(self)
+        self.info(f"Logger {name} initialized ({len(LOGGERS)})")
 
     def rotate_old_logs(self):
         if f_exists(f"{self.path}/{self.filename}.1"):
@@ -28,10 +31,13 @@ class Logger():
 
 
     def emit(self, message, level="INFO"):
-        _msg = f"{level:>10} - {self.name:>8}: {message}"
+        _msg = f"{datetime()} - {level:>10} - {self.name:>8}: {message}"
         print(_msg)
         with open(f"{self.path}/{self.filename}", "a") as f:
             f.write(_msg + "\n")
+
+    def debug(self, message):
+        self.emit(message, "DEBUG")
 
     def info(self, message):
         self.emit(message, "INFO")
@@ -52,3 +58,5 @@ class Logger():
             _file += f".{num}"
         with open(_file, 'r') as f:
             print(f.read())
+
+    __call__ = info

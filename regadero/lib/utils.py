@@ -1,6 +1,7 @@
 
+from json import loads as j_loads
 from os import stat as os_stat
-from time import localtime
+from time import localtime as t_localtime
 def f_exists(path) -> bool:
     try:
         if os_stat(path):
@@ -8,40 +9,33 @@ def f_exists(path) -> bool:
     except OSError:
         return False
 
-# always Europe/Madrid for now
-# ADJUST = {
-#     "Europe/Madrid":{
-#         "hours": 2,
-#         "minutes": 00
-#     }
-# }
+def datetime(custom_time=None):
+    year, month, day, hour, minute, second, weekday, yearday = t_localtime(custom_time)
+    return f"{year}-{month:02d}-{day:02d}T{hour:02d}:{minute:02d}:{second:02d}"
 
-class datetime():
+def time(custom_time=None):
+    year, month, day, hour, minute, second, weekday, yearday = t_localtime(custom_time)
+    return f"{hour:02d}:{minute:02d}:{second:02d}"
 
-    @staticmethod
-    def datetime():
-        year, month, day, hour, minute, second, weekday, yearday = localtime()
-        return f"{year}-{month}-{day}T{hour}:{minute}:{second}"
-
-    @staticmethod
-    def time():
-        year, month, day, hour, minute, second, weekday, yearday = localtime()
-        return f"{hour}:{minute}:{second}"
-
-    @staticmethod
-    def date():
-        year, month, day, hour, minute, second, weekday, yearday = localtime()
-        return f"{year}-{month}-{day}"
+def date(custom_time=None):
+    year, month, day, hour, minute, second, weekday, yearday = t_localtime(custom_time)
+    return f"{year}-{month:02d}-{day:02d}"
 
 # this class is not running here in micropython
 class json_data():
+
     data:dict = None
 
-    def _init_(self, data:dict) -> None:
-        self.data = data
+    def __init__(self, data:dict|str) -> None:
+        if type(data) == str:
+            self.data = j_loads(data)
+        elif type(data) == dict:
+            self.data = data
+        else:
+            raise NotImplementedError(f"type of data not supported: {type(data)}")
 
-    def get(self, element:str, default:str=''):
-        result = self.data
+    def get(self, element:str, default:str=None):
+        result = self.data.copy()
         elements = element.split('.')
         for n, item in enumerate(elements):
             if item in result:
@@ -54,4 +48,5 @@ class json_data():
             else:
                 return default
         return result
-    _call_ = get
+
+    __call__ = get
