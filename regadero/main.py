@@ -9,7 +9,7 @@ from wifi_manager import configure_wifi
 from gpio_manager import GpioManager
 from telegram_bot import TelegramBot
 
-from irrigation_scheduler import Program
+from irrigation import Program
 
 from utils import datetime, json_data, system_data
 

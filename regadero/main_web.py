@@ -7,7 +7,6 @@ from microdot.utemplate import Template
 
 from logger import Logger
 from gpio_manager import GpioManager
-from gpio_manager_small import blink
 from utils import datetime, json_data, system_data
 from wifi_manager import configure_wifi
 
