@@ -67,3 +67,5 @@ programs = [
 for prog in programs:
     prog.start()
     t_sleep(0.1)
+
+logger.info("Regadero system started properly")
