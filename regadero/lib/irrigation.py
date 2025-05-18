@@ -141,6 +141,7 @@ class Program():
             if zone.get('enabled', True):
                 self.notify(f"  >> Starting irrigation on zone {zone['name']} "
                             f"during: {zone.get('run_time', self.run_time)} minutes")
+                self.gpio.blink("green", speed='ssfast', time=1)
                 self.gpio.start_blink_led('blue', 'sfast')
                 t_sleep(60 * zone.get('run_time', self.run_time))
                 self.gpio.stop_blink_led('blue')
@@ -164,12 +165,14 @@ class Program():
                               f"- on days {self.week_days}")
             if  now > self.next_run_datetime and f"{wd}" in self.week_days:
                 self.notify(f"Running program {self.name}")
+                self.gpio.blink("red", speed='ssfast', time=2)
                 self.executing = True
                 self.irrigation()
                 self.executing = False
                 self.set_next_run_datetime()
                 self.notify(f"End run program {self.name} - next run "
                             f"at {datetime(self.next_run_datetime)} on days {self.week_days}")
+                self.gpio.led_on("red", 2)
             t_sleep(self.wait_time)
         self.notify(f"Program '{self.name}' has been stopped or disabled!!"
                     f" stopped: {self.stopped} enabled: {self.enabled}")
