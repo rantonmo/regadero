@@ -1,5 +1,7 @@
 import ntptime
 import gc
+
+from os import listdir as os_listdir
 from time import sleep as t_sleep
 
 from machine import RTC
@@ -21,10 +23,9 @@ gc.threshold(24 * 60 * 60)
 try:
     logger.info("reading main settings from file")
     settings = json_data(open('settings.json', 'r').read())
-    logger.info("reading data file")
-    data = json_data(open('data.json', 'r').read())
 except Exception as exc:
-    logger.error("Error reading settings or data: %s" % exc)
+    logger.error("Error reading settings: %s" % exc)
+    raise RuntimeError("Error reading settins file")
 
 logger.info("configuring gpio")
 gpm = GpioManager(settings("pins"))
@@ -57,7 +58,9 @@ tbot = TelegramBot(settings('telegram.token'),
 if tbot:
     gpm.blink_led('green')
 
-programs = [Program(x, gpm, tbot) for x in data("programs")]
+programs = []
+for program_file in os_listdir('/programs'):
+    programs.append(Program(open(f"/programs/{program_file}")), gpm, tbot)
 
 # for prog in programs:
 #     prog.start()
