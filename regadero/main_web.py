@@ -1,22 +1,43 @@
-from machine import Pin
+import ntptime
+
+from machine import RTC
 
 from microdot import Microdot, Response
 from microdot.utemplate import Template
 
-
-# from gpio_manager import GpioManager
+from logger import Logger
+from gpio_manager import GpioManager
 from gpio_manager_small import blink
-from utils import datetime, json_data
+from utils import datetime, json_data, system_data
 from wifi_manager import configure_wifi
 
+logger = Logger()
 
 settings = json_data(open('settings.json', 'r').read())
 
-bled = Pin(2, Pin.OUT, value=0)
-
-blink(bled, time=1.5)
+logger.info("configuring gpio")
+gpm = GpioManager(settings("pins"))
+if gpm:
+    gpm.blink_led('blue')
 
 wlan = configure_wifi(settings('wifi'))
+if wlan and wlan.isconnected():
+    gpm.blink_led('blue')
+
+logger.info("configuring local time")
+ntptime.host = "1.europe.pool.ntp.org"
+ntptime.settime()
+logger.info(f"  > time in UTC is {datetime()}")
+
+logger.info("GMT adjustment (manual adjustment +02:00)")
+rtc = RTC()
+(Y, M, D, WD, h, m, s, ss) = rtc.datetime()
+rtc.datetime((Y, M, D, WD, h + 2, m, s, ss))
+logger.info(f"  > time adjusted is {datetime()}")
+
+sys_data = system_data()
+sys_data
+
 
 app = Microdot()
 Response.default_content_type = 'text/html'

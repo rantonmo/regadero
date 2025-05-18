@@ -3,7 +3,7 @@ import gc
 import _thread
 
 from network import WLAN as N_WLAN, STA_IF as N_STA_IF
-from os import stat as os_stat, statvfs as os_statvfs, uname as os_uname
+from os import stat as os_stat, statvfs as os_statvfs, uname as os_uname, listdir as os_listdir
 from time import localtime as t_localtime, sleep as t_sleep
 
 from json import loads as j_loads
@@ -13,6 +13,13 @@ def f_exists(path) -> bool:
         if os_stat(path):
             return True
     except OSError:
+        return False
+
+def isdir(path) -> bool:
+    try:
+        if type(os_listdir(path)) == list:
+            return True
+    except:
         return False
 
 def datetime(custom_time=None):
@@ -136,6 +143,9 @@ class system_data():
     def start(self):
         self.enabled = True
         _thread.start_new_thread(self._start_collecting_stats, ())
+
+    def stop(self):
+        self.enabled = False
 
     def _start_collecting_stats(self, minutes=30):
         while self.enabled:

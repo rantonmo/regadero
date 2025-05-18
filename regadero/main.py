@@ -11,11 +11,11 @@ from telegram_bot import TelegramBot
 
 from irrigation_scheduler import Program
 
-from utils import datetime, json_data
+from utils import datetime, json_data, system_data
 
 logger = Logger()
 
-logger.info("enable gc")
+logger.info("schedule gc every day")
 gc.threshold(24 * 60 * 60)
 
 try:
@@ -26,7 +26,7 @@ try:
 except Exception as exc:
     logger.error("Error reading settings or data: %s" % exc)
 
-logger.info("configuring onboard led")
+logger.info("configuring gpio")
 gpm = GpioManager(settings("pins"))
 if gpm:
     gpm.blink_led('red')
@@ -46,6 +46,10 @@ rtc = RTC()
 rtc.datetime((Y, M, D, WD, h + 2, m, s, ss))
 logger.info(f"  > time adjusted is {datetime()}")
 
+logger.info("Initializing and starting system data collector")
+sys_data = system_data()
+sys_data.start()
+
 logger.info("Initializing Telegram bot")
 tbot = TelegramBot(settings('telegram.token'),
                    settings('telegram.chat_id'))
@@ -53,9 +57,8 @@ tbot = TelegramBot(settings('telegram.token'),
 if tbot:
     gpm.blink_led('green')
 
-tbot.send_message("regadero (testing) has been initialized", notify=False)
 programs = [Program(x, gpm, tbot) for x in data("programs")]
 
-for prog in programs:
-    prog.start()
-    t_sleep(0.1)
+# for prog in programs:
+#     prog.start()
+#     t_sleep(0.1)
