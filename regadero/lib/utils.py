@@ -88,7 +88,7 @@ class system_data():
         mac = wlan.config('mac')
 
         if not wlan.isconnected():
-            return {
+            self.wlan =  {
                 "essid": wlan.config('essid'),
                 "ip": wlan.ifconfig()[0],
                 "mac": f"{mac[0]:02x}:{mac[1]:02x}:{mac[2]:02x}:{mac[3]:02x}:{mac[4]:02x}",
@@ -125,10 +125,10 @@ class system_data():
         usage = (free + alloc) / (100 * alloc)
 
         self.memory = {
-            "total": total * 1024,
-            "usage": usage * 1024,
-            "free": free * 1024,
-            "used": alloc * 1024,
+            "total": total / 1024,
+            "usage": usage / 1024,
+            "free": free / 1024,
+            "used": alloc / 1024,
             "collected": collected
         }
 
