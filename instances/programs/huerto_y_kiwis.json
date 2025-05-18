@@ -3,10 +3,15 @@
     "week_days": "0123456",
     "name": "Huerto y kiwis",
     "iteration": "day",
-    "schedule_time": "20:45",
+    "schedule_time": "12:00",
     "wether_adjustment": false,
     "run_time": 9,
     "zones": [
+        {
+            "name": "zone1",
+            "enabled": true,
+            "run_time": 1
+        },
         {
             "name": "zone5",
             "enabled": true
