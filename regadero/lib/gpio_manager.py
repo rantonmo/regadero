@@ -4,6 +4,7 @@ from time import sleep as t_sleep
 import _thread
 
 SP_TIME = {
+    "ssfast": 0.0312,
     "sfast": 0.0625,
     "fast": 0.125,
     "normal": 0.25,
@@ -93,7 +94,7 @@ class GpioManager():
 
         if led in self.leds:
             # set init value
-            self.leds[led].value(off_value)
+            self.leds[led].value((off_value + 1) % 2)
 
             if speed and speed in SP_TIME:
                 sleep = SP_TIME['speed']
@@ -102,7 +103,7 @@ class GpioManager():
                 self.leds[led].toggle()
                 t_sleep(sleep)
             # end with off - switch init value
-            self.leds[led].value((off_value + 1) % 2)
+            self.leds[led].value(off_value)
         else:
             self.logger.error(f"led {led} not found or not configured. Aborting...")
 
@@ -137,12 +138,15 @@ class GpioManager():
         else:
             self.logger.error(f"led {led} not configured")
 
-    def led_on(self, led):
+    def led_on(self, led, time:int=None):
         self.logger.info(f"set led {led} on")
         if led in self.leds:
             self.leds[led].on()
         else:
             self.logger.error(f"led {led} not configured")
+        if time:
+            t_sleep(time)
+            self.leds[led].off()
 
     def led_off(self, led):
         self.logger.info(f"set led {led} off")
