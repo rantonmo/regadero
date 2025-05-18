@@ -38,7 +38,8 @@ class json_data():
         elif type(data) == dict:
             self.data = data
         else:
-            raise NotImplementedError(f"type of data not supported: {type(data)}")
+            raise NotImplementedError(
+                f"type of data not supported: {type(data)}")
 
     def get(self, element:str, default:str=None):
         result = self.data.copy()
@@ -69,12 +70,14 @@ class system_data():
 
     def __init__(self):
         uname = os_uname()
-        self.system = {
+        self.system = {  # unmutable data
             "sysname": uname[0],
             "nodename": uname[1],
             "release": uname[2],
             "machine": uname[4]
         }
+
+        self.collect_data()
 
     def collect_data(self):
         self.memory = self.get_memory_stats()
@@ -96,7 +99,7 @@ class system_data():
         }
 
     def get_flash_stats(self):
-        stats = os_statvfs()
+        stats = os_statvfs('/')
 
         self.flash = {
             "total": (stats[1] * stats[2]) / (1024 * 1024),
