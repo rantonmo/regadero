@@ -3,9 +3,7 @@ from logger import Logger
 from network import WLAN as N_WLAN, STA_IF as N_STA_IF
 from time import sleep as t_sleep
 
-logfile = "logs/regadero.log"
-
-def configure_wifi(wificonfig:dict, maxtry=40) -> N_WLAN:
+def configure_wifi(wificonfig:dict, maxtry=60) -> N_WLAN:
 
     logger = Logger(name="wifi")
 
@@ -27,5 +25,7 @@ def configure_wifi(wificonfig:dict, maxtry=40) -> N_WLAN:
     if wlan.isconnected():
         logger.info(f"wlan connected: {wlan.ifconfig()}")
         return wlan
+    else:
+        logger.error(f"Error connecting to essid {wificonfig['essid']} - {wlan.status()}")
 
     logger.error(f"Error connecting to wlan {wificonfig['essid']} - {wlan.isconnected()} - {wlan.ifconfig()}")

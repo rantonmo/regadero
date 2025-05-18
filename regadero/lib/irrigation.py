@@ -1,11 +1,14 @@
+from os import mkdir as os_mkdir
 from time import localtime as t_localtime, mktime as t_mktime, sleep as t_sleep
-
+from json import dumps as j_dumps
 import _thread
+
+
 
 from gpio_manager import GpioManager
 from logger import Logger
 from telegram_bot import TelegramBot
-from utils import datetime
+from utils import datetime, isdir
 
 class Program():
 
@@ -16,6 +19,7 @@ class Program():
 
     name:str = None
     schedule_time:dict = None
+    iteration = None
     week_days:str = None  # "0123456"
     wether_adjustment:bool = False
     run_time:int = None
@@ -30,9 +34,9 @@ class Program():
         """
         program dict properties:
 
-            * every (str): [NUM] DAY|HOUR
             * name (str): name for the program
             * schedule_time (str with format HH:MM): time for the program to start
+            * iteration (str): [NUM] DAY|HOUR  -- NOT YET IMPLEMENTED
             * week_days (str with format, defualt: 0123456): week days for the program to start
             * wether_adjustment (bool default true): adjust times with prediccion data
             * time (int): time in minutes to be used as default value on the zones.
@@ -58,6 +62,7 @@ class Program():
             "H": int(program['schedule_time'].split(':')[0]),
             "M": int(program['schedule_time'].split(':')[1])
         }
+        self.iteration = program.get("iteration", "1 day")  # IGNORED, NOT YET IMPLEMENTED
         self.week_days = program.get('week_days', '0123456')
         self.wether_adjustment = program.get('wether_adjustment', False)
         self.run_time = program.get('run_time', 0)
@@ -78,6 +83,25 @@ class Program():
         self.logger.info(f"  > {len(self.zones)} zones loaded")
         self.set_next_run_datetime()
         self.logger.info("program has been initialized")
+
+
+    def save(self, path="/programs"):
+        " save program to file "
+        if not isdir(path):
+            os_mkdir(path)
+
+        with open(f"{path}/{self.name.lower().replace(' ', '_')}.json", 'w') as __f:
+            __f.write(j_dumps({
+                    "name": self.name,
+                    "enabled": self.enabled,
+                    "iteration": self.iteration,
+                    "schedule_time": f"{self.schedule_time['H']}:{self.schedule_time['M']}",
+                    "week_days": self.week_days,
+                    "wether_adjustment": self.wether_adjustment,
+                    "run_time": self.run_time,
+                    "zones": self.zones
+                }))
+
 
     def notify(self, message, notify=True):
 
@@ -117,6 +141,7 @@ class Program():
             if zone.get('enabled', True):
                 self.notify(f"  >> Starting irrigation on zone {zone['name']} "
                             f"during: {zone.get('run_time', self.run_time)} minutes")
+                self.gpio.blink("green", speed='ssfast', time=1)
                 self.gpio.start_blink_led('blue', 'sfast')
                 t_sleep(60 * zone.get('run_time', self.run_time))
                 self.gpio.stop_blink_led('blue')
@@ -140,12 +165,14 @@ class Program():
                               f"- on days {self.week_days}")
             if  now > self.next_run_datetime and f"{wd}" in self.week_days:
                 self.notify(f"Running program {self.name}")
+                self.gpio.blink("red", speed='ssfast', time=2)
                 self.executing = True
                 self.irrigation()
                 self.executing = False
                 self.set_next_run_datetime()
                 self.notify(f"End run program {self.name} - next run "
                             f"at {datetime(self.next_run_datetime)} on days {self.week_days}")
+                self.gpio.led_on("red", 2)
             t_sleep(self.wait_time)
         self.notify(f"Program '{self.name}' has been stopped or disabled!!"
                     f" stopped: {self.stopped} enabled: {self.enabled}")

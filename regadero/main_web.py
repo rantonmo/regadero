@@ -1,49 +1,42 @@
-
 import ntptime
 
-from json import loads as json_loads
 from machine import RTC
 
 from microdot import Microdot, Response
 from microdot.utemplate import Template
 
 from logger import Logger
-
 from gpio_manager import GpioManager
+from utils import datetime, json_data, system_data
 from wifi_manager import configure_wifi
-from telegram_bot import TelegramBot
-from utils import datetime
-
 
 logger = Logger()
 
-logger.info("getting settings")
-SETTINGS = json_loads(open('settings.json', 'r').read())
+settings = json_data(open('settings.json', 'r').read())
 
-gpm = GpioManager(SETTINGS["pins"])
+logger.info("configuring gpio")
+gpm = GpioManager(settings("pins"))
 if gpm:
-    gpm.blink_led('red', 3, 0.5)
+    gpm.blink_led('blue')
 
-wlan = configure_wifi(SETTINGS['wifi'])
+wlan = configure_wifi(settings('wifi'))
 if wlan and wlan.isconnected():
     gpm.blink_led('blue')
 
 logger.info("configuring local time")
 ntptime.host = "1.europe.pool.ntp.org"
 ntptime.settime()
-logger.info(f"  > time in UTC is {datetime.datetime()}")
+logger.info(f"  > time in UTC is {datetime()}")
 
 logger.info("GMT adjustment (manual adjustment +02:00)")
 rtc = RTC()
-
 (Y, M, D, WD, h, m, s, ss) = rtc.datetime()
 rtc.datetime((Y, M, D, WD, h + 2, m, s, ss))
+logger.info(f"  > time adjusted is {datetime()}")
 
-logger.info(f"  > time adjusted is {datetime.datetime()}")
+sys_data = system_data()
+sys_data
 
-
-tbot = TelegramBot(SETTINGS['telegram']['token'],
-                   SETTINGS['telegram']['chat_id'])
 
 app = Microdot()
 Response.default_content_type = 'text/html'

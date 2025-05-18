@@ -1,5 +1,8 @@
 import ntptime
 import gc
+
+from json import loads as j_loads
+from os import listdir as os_listdir
 from time import sleep as t_sleep
 
 from machine import RTC
@@ -9,24 +12,23 @@ from wifi_manager import configure_wifi
 from gpio_manager import GpioManager
 from telegram_bot import TelegramBot
 
-from irrigation_scheduler import Program
+from irrigation import Program
 
-from utils import datetime, json_data
+from utils import datetime, json_data, system_data
 
 logger = Logger()
 
-logger.info("enable gc")
+logger.info("schedule gc every day")
 gc.threshold(24 * 60 * 60)
 
 try:
     logger.info("reading main settings from file")
     settings = json_data(open('settings.json', 'r').read())
-    logger.info("reading data file")
-    data = json_data(open('data.json', 'r').read())
 except Exception as exc:
-    logger.error("Error reading settings or data: %s" % exc)
+    logger.error("Error reading settings: %s" % exc)
+    raise RuntimeError("Error reading settins file")
 
-logger.info("configuring onboard led")
+logger.info("configuring gpio")
 gpm = GpioManager(settings("pins"))
 if gpm:
     gpm.blink_led('red')
@@ -46,6 +48,10 @@ rtc = RTC()
 rtc.datetime((Y, M, D, WD, h + 2, m, s, ss))
 logger.info(f"  > time adjusted is {datetime()}")
 
+logger.info("Initializing and starting system data collector")
+sys_data = system_data()
+sys_data.start()
+
 logger.info("Initializing Telegram bot")
 tbot = TelegramBot(settings('telegram.token'),
                    settings('telegram.chat_id'))
@@ -53,9 +59,13 @@ tbot = TelegramBot(settings('telegram.token'),
 if tbot:
     gpm.blink_led('green')
 
-tbot.send_message("regadero (testing) has been initialized", notify=False)
-programs = [Program(x, gpm, tbot) for x in data("programs")]
+programs = [
+    Program(j_loads(open(f"/programs/{program_file}").read()), gpm, tbot)
+        for program_file in os_listdir('/programs')
+]
 
 for prog in programs:
     prog.start()
     t_sleep(0.1)
+
+logger.info("Regadero system started properly")
