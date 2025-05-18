@@ -1,0 +1,29 @@
+{
+    "enabled": true,
+    "week_days": "0123456",
+    "name": "Jardin principal",
+    "iteration": "1 day",
+    "schedule_time": "21:20",
+    "wether_adjustment": true,
+    "run_time": 5,
+    "zones": [
+        {
+            "enabled": true,
+            "name": "zone6",
+            "run_time": 6
+        },
+        {
+            "enabled": true,
+            "name": "zone2",
+            "run_time": 2
+        },
+        {
+            "name": "zone3",
+            "enabled": true
+        },
+        {
+            "name": "zone4",
+            "enabled": true
+        }
+    ]
+}
