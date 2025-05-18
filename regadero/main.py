@@ -1,6 +1,7 @@
 import ntptime
 import gc
 
+from json import loads as j_loads
 from os import listdir as os_listdir
 from time import sleep as t_sleep
 
@@ -58,10 +59,11 @@ tbot = TelegramBot(settings('telegram.token'),
 if tbot:
     gpm.blink_led('green')
 
-programs = []
-for program_file in os_listdir('/programs'):
-    programs.append(Program(open(f"/programs/{program_file}")), gpm, tbot)
+programs = [
+    Program(j_loads(open(f"/programs/{program_file}").read()), gpm, tbot)
+        for program_file in os_listdir('/programs')
+]
 
-# for prog in programs:
-#     prog.start()
-#     t_sleep(0.1)
+for prog in programs:
+    prog.start()
+    t_sleep(0.1)
