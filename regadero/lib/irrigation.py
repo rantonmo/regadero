@@ -95,7 +95,7 @@ class Program():
                     "name": self.name,
                     "enabled": self.enabled,
                     "iteration": self.iteration,
-                    "schedule_time": self.schedule_time,
+                    "schedule_time": f"{self.schedule_time['H']}:{self.schedule_time['M']}",
                     "week_days": self.week_days,
                     "wether_adjustment": self.wether_adjustment,
                     "run_time": self.run_time,
