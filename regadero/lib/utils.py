@@ -67,7 +67,6 @@ class system_data():
     flash = None
     wlan = None
 
-
     def __init__(self):
         uname = os_uname()
         self.system = {  # unmutable data
