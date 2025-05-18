@@ -1,7 +1,13 @@
 
+import gc
+import _thread
+
+from network import WLAN as N_WLAN, STA_IF as N_STA_IF
+from os import stat as os_stat, statvfs as os_statvfs, uname as os_uname
+from time import localtime as t_localtime, sleep as t_sleep
+
 from json import loads as j_loads
-from os import stat as os_stat
-from time import localtime as t_localtime
+
 def f_exists(path) -> bool:
     try:
         if os_stat(path):
@@ -50,3 +56,74 @@ class json_data():
         return result
 
     __call__ = get
+
+class system_data():
+
+    enabled = True
+
+    system = None
+    memory = None
+    flash = None
+    wlan = None
+
+
+    def __init__(self):
+        uname = os_uname()
+        self.system = {
+            "sysname": uname[0],
+            "nodename": uname[1],
+            "release": uname[2],
+            "machine": uname[4]
+        }
+
+    def collect_data(self):
+        self.memory = self.get_memory_stats()
+        self.flash = self.get_flash_stats()
+        self.wlan = self.get_wlan_stats()
+
+    def get_wlan_stats(self):
+        wlan = N_WLAN(N_STA_IF)
+
+        mac = wlan.config('mac')
+        self.wlan = {
+            "essid": wlan.config('essid'),
+            "ip": wlan.ifconfig()[0],
+            "mac": f"{mac[0]:02x}:{mac[1]:02x}:{mac[2]:02x}:{mac[3]:02x}:{mac[4]:02x}",
+            "rssi": wlan.status('rssi'),
+            "channel": wlan.config('channel'),
+            "hostname": wlan.config('hostname'),
+            "status": wlan.status()
+        }
+
+    def get_flash_stats(self):
+        stats = os_statvfs()
+
+        self.flash = {
+            "total": (stats[1] * stats[2]) / (1024 * 1024),
+            "free": (stats[0] * stats[3]) / (1024 * 1024)
+        }
+
+    def get_memory_stats(self):
+        collected = gc.collect()
+        free = gc.mem_free()  # bytes
+        alloc = gc.mem_alloc()  # bytes
+
+        total = free +  alloc
+        usage = (free + alloc) / (100 * alloc)
+
+        return {
+            "total": total * 1024,
+            "usage": usage * 1024,
+            "free": free * 1024,
+            "used": alloc * 1024,
+            "collected": collected
+        }
+
+    def start(self):
+        self.enabled = True
+        _thread.start_new_thread(self._start_collecting_stats, ())
+
+    def _start_collecting_stats(self, minutes=120):
+        while self.enabled:
+            self.collect_data()
+            t_sleep(60 * minutes)
