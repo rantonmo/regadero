@@ -97,6 +97,7 @@ class system_data():
                 "hostname": '',
                 "status": "not connected"
             }
+            return
 
         self.wlan = {
             "essid": wlan.config('essid'),
@@ -136,7 +137,8 @@ class system_data():
         self.enabled = True
         _thread.start_new_thread(self._start_collecting_stats, ())
 
-    def _start_collecting_stats(self, minutes=120):
+    def _start_collecting_stats(self, minutes=30):
         while self.enabled:
+            print("collecting system data")
             self.collect_data()
             t_sleep(60 * minutes)
