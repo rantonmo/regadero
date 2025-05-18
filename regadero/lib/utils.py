@@ -85,6 +85,7 @@ class system_data():
 
     def get_wlan_stats(self):
         wlan = N_WLAN(N_STA_IF)
+        mac = wlan.config('mac')
 
         if not wlan.isconnected():
             return {
@@ -97,7 +98,6 @@ class system_data():
                 "status": "not connected"
             }
 
-        mac = wlan.config('mac')
         self.wlan = {
             "essid": wlan.config('essid'),
             "ip": wlan.ifconfig()[0],
