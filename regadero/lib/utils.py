@@ -79,9 +79,9 @@ class system_data():
         self.collect_data()
 
     def collect_data(self):
-        self.memory = self.get_memory_stats()
-        self.flash = self.get_flash_stats()
-        self.wlan = self.get_wlan_stats()
+        self.get_memory_stats()
+        self.get_flash_stats()
+        self.get_wlan_stats()
 
     def get_wlan_stats(self):
         wlan = N_WLAN(N_STA_IF)
@@ -124,7 +124,7 @@ class system_data():
         total = free +  alloc
         usage = (free + alloc) / (100 * alloc)
 
-        return {
+        self.memory = {
             "total": total * 1024,
             "usage": usage * 1024,
             "free": free * 1024,
