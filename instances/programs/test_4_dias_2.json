@@ -1,9 +1,9 @@
 {
     "enabled": true,
-    "week_days": "0123456",
-    "name": "Jardin principal",
+    "week_days": "0_2_4_6",
+    "name": "Test 4 dias pares",
     "iteration": "1 day",
-    "schedule_time": "21:20",
+    "schedule_time": "20:29",
     "wether_adjustment": true,
     "run_time": 5,
     "zones": [

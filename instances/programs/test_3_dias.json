@@ -1,9 +1,9 @@
 {
     "enabled": true,
     "week_days": "_1_3_5_",
-    "name": "Test 3 dias",
+    "name": "Test 3 dias impares",
     "iteration": "1 day",
-    "schedule_time": "10:00",
+    "schedule_time": "20:55",
     "wether_adjustment": true,
     "run_time": 5,
     "zones": [

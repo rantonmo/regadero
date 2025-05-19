@@ -59,13 +59,13 @@ tbot = TelegramBot(settings('telegram.token'),
 if tbot:
     gpm.blink_led('green')
 
-programs = [
-    Program(j_loads(open(f"/programs/{program_file}").read()), gpm, tbot)
-        for program_file in os_listdir('/programs')
-]
+# programs = [
+#     Program(j_loads(open(f"/programs/{program_file}").read()), gpm, tbot)
+#         for program_file in os_listdir('/programs')
+# ]
 
-for prog in programs:
-    prog.start()
-    t_sleep(0.1)
+# for prog in programs:
+#     prog.start()
+#     t_sleep(0.1)
 
-logger.info("Regadero system started properly")
+# logger.info("Regadero system started properly")
