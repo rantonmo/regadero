@@ -23,7 +23,7 @@ class TelegramBot():
 
     timeout = 15
 
-    last_update_date = None
+    last_update_id = None
 
     def __init__(self, token, chat_id=None):
 
@@ -69,35 +69,30 @@ class TelegramBot():
         data = self._do_get('getMe')
         return '@' + data['username'], data['first_name'], data['id']
 
-    def get_updates(self):
+    def get_updates(self, offset=None):
         # we should grab the last date here
-        updates = self._do_get('getUpdates')
+        data = {}
+        if offset:
+            data.update({"offset": offset})
+        updates = self._do_post('getUpdates', data)
+
         if len(updates) > 0:
-            self.last_update_date = updates[-1]['message']['date']
-            self.logger.info(f"last date is now {self.last_update_date}")
-        return self._do_get('getUpdates')
+            self.last_update_id = updates[-1]['update_id']
+            self.logger.info(f"last date is now {self.last_update_id}")
+        return updates
 
     def get_refered_updates(self):
         "get messates containin the bot username in its text"
         return [msg for msg in self.get_updates() if self.username in msg.get('text', '')]
 
-    def get_last_update(self):
+    def get_commands(self):
+        updates = self.get_updates(
+            self.last_update_id + 1 if self.last_update_id else None)
 
-        self.logger.info(f"getting last update from chat {self.chat_id}")
-
-        updates = self.get_updates()
-
-        while len(updates > 0):
-            update = updates.pop()
-            if not 'message' in update:
-                self.logger.error("no message in last update!!")
-                return None
-
-            self.logger.info(f"last update from {update['message']['from']['first_name']} "
-                             f"on chat {update['message']['chat']['title']}")
-
-        return update
-
+        return [
+            x['message']['text'] for x in updates
+              if 'text' in x['message'] and 'loli' in x['message']['text'].lower()
+        ]
 
     def ok_to_last_message(self):
 
