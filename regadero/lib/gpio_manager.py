@@ -12,28 +12,6 @@ SP_TIME = {
     "sslow": 1
 }
 
-# simple blink function - usefull for esp8266
-def blink(led:Pin, sleep:float=0.125, speed:str=None, time:int=1, off_value:int=0) -> None:
-    """
-    Blink a led connected to the Pin _led
-
-    Parameters:
-        * led: Pin connected to the led to blink
-        * speed (str, optional): Speed to convert in time to be used as sleep. If speed is valid overwrite time
-        * sleep (float, optional, default 0.125): time between switch on/off
-        * time (intk optional, default 1): time to blink in seconds
-        * off_value (init): value to put the pin off
-    Return:
-        None
-    """
-    if speed and speed in SP_TIME:
-        sleep = SP_TIME['speed']
-    led.value((off_value + 1) % 2)
-    for i in range(time/sleep):
-        led.toggle()
-        t_sleep(sleep)
-    led.value(off_value)
-
 class GpioManager():
     leds = {}
     _lock_led = {}
@@ -73,14 +51,14 @@ class GpioManager():
         for item in self.leds.keys():
             print(item)
 
-    def blink_led(self, led, speed:str=None, time=1.5, sleep=0.25, off_value=0):
+    def blink_led(self, led:str, speed:str=None, time:float=1.5, sleep:float=0.25, off_value=0):
 
         self.logger.info(f"blinking led {off_value} - {led} - {speed} - {sleep} - {time}")
         if led in self.leds:
             self.leds[led].value((off_value + 1) % 2)
 
             if speed and speed in SP_TIME:
-                sleep = SP_TIME['speed']
+                sleep = SP_TIME[speed]
 
             for __i in range(0, time/sleep):
                 self.leds[led].toggle()
