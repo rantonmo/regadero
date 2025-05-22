@@ -1,6 +1,33 @@
 {
   "app": "regadero app",
-  "vars": {
-    "telegram_token": "0000000000:AAAA-aaaaaaaaaaaaaaaaa-0000000000000"
+  "wifi": {
+    "hostname": "regadero",
+    "essid": "DIGIFIBRA-xxxx",
+    "key": "xxxxxxxxxxxxxxxxx"
+  },
+  "telegram": {
+    "token": "0000000000:AAAA-xxxxxxxxxxxxxxxx-0000000000000",
+    "chat_id": 15753811,
+    "group_chat_id": -670513750
+  },
+  "aemet": {
+    "token": "xxxxxxxxxxxxxxxxx.......................xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "location_code": "10220",
+    "stations": []
+  },
+  "pins":{
+    "buzz": {"pin": 15, "type": "buzzer"},
+    "bled": {"pin": 2, "type": "led"},
+    "red": {"pin": 13, "type": "led"},
+    "green": {"pin":12, "type": "led"},
+    "blue": {"pin": 14, "type": "led"},
+    "left": {"pin": 18, "type": "button"},
+    "right": {"pin": 19, "type": "button"},
+    "zone1": {"pin": 5, "type": "switch"},
+    "zone2": {"pin": 18, "type": "switch"},
+    "zone3": {"pin": 19, "type": "switch"},
+    "zone4": {"pin": 21, "type": "switch"},
+    "zone5": {"pin": 22, "type": "switch"},
+    "zone6": {"pin": 23, "type": "switch"}
   }
 }
