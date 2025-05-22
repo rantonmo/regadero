@@ -27,7 +27,7 @@ class Program():
     enabled = True
 
     stopped = False
-    executing = False
+    running = False
     wait_time = 1 * 60
 
     def __init__(self, program:dict, gpio:GpioManager, bot:TelegramBot=None) -> None:
@@ -84,6 +84,15 @@ class Program():
         self.set_next_run_datetime()
         self.logger.info("program has been initialized")
 
+    def get_summary(self):
+        return f"""
+    name: {self.name} - running: {self.running}
+    enabled: {self.enabled}
+    week days: {self.week_days}
+    schedule time: {self.schedule_time['H']}: {self.schedule_time['M']}
+    run_time: {self.run_time}
+    next_run: {datetime(self.next_run_datetime)}
+    """
 
     def save(self, path="/programs"):
         " save program to file "
@@ -154,9 +163,9 @@ class Program():
     def run(self):
         self.notify(f"Running program {self.name}")
         self.gpio.blink_led("red", speed='ssfast', time=2)
-        self.executing = True
+        self.running = True
         self.irrigation()
-        self.executing = False
+        self.running = False
         self.set_next_run_datetime()
         self.notify(f"End run program {self.name} - next run "
                     f"at {datetime(self.next_run_datetime)} on days {self.week_days}")
