@@ -1,5 +1,6 @@
 
 import gc
+import re
 import _thread
 
 from network import WLAN as N_WLAN, STA_IF as N_STA_IF
@@ -34,7 +35,30 @@ def date(custom_time=None):
     year, month, day, hour, minute, second, weekday, yearday = t_localtime(custom_time)
     return f"{year}-{month:02d}-{day:02d}"
 
-# this class is not running here in micropython
+
+def listen_to_commands(programs, system, bot):
+    while True:
+        for command in bot.get_commands():
+
+            if re.search('system\s+data', command['text']):
+                bot.message_reaction(
+                    command['chat'], command['message_id'])
+                bot.send_message(system.get_summary())
+            elif re.search('programs?\s+(data|info)', command['text']):
+                bot.message_reaction(
+                    command['chat'], command['message_id'])
+
+                text = ''
+                for i, p in enumerate(programs):
+                    text += f"Program id {i}\n{p.get_summary()}\n\n"
+                bot.send_message(text)
+            else:
+                bot.message_reaction(
+                    command['chat'], command['message_id'], 'mmm')
+                bot.send_message('me no entendelll')
+
+        t_sleep(20)
+
 class json_data():
 
     data:dict = None
@@ -140,6 +164,19 @@ class system_data():
             "collected": collected
         }
 
+    def get_summary(self):
+        return f"""
+*System Status Summary*
+    *Current datetime:* {datetime()}
+    _Memory stats:_
+    `usage: {self.memory['usage']} of {self.memory['total']}`
+
+    _flash:_
+    `Total flash: {self.flash['total']} free: {self.flash['free']}`
+
+    _Wifi:_
+    essid: {self.wlan['essid']} - ip: {self.wlan['ip']} rssi: {self.wlan['rssi']}
+    """
     def start(self):
         self.enabled = True
         _thread.start_new_thread(self._start_collecting_stats, ())

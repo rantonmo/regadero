@@ -5,8 +5,13 @@ from logger import Logger
 
 EMOJIS = {
     'ok': "👍",
-    'nooo': "😱",
-    'cry': "😭"
+    'ko': "👎",
+    'noo': "😱",
+    'cry': "😭",
+    'upset': "🤬",
+    'ready': "🫡",
+    'ghost': "👻",
+    'mmm': "🤔"
 }
 
 class TelegramBot():
@@ -90,26 +95,27 @@ class TelegramBot():
             self.last_update_id + 1 if self.last_update_id else None)
 
         return [
-            x['message']['text'] for x in updates
-              if 'text' in x['message'] and 'loli' in x['message']['text'].lower()
-        ]
+            {
+                "text": x['message']['text'],
+                "chat": x['message']['chat']['id'],
+                "user": x['message']['from']['id'],
+                "message_id": x['message']['message_id']
+            }
+            for x in updates
+            if 'text' in x['message'] and 'loli' in x['message']['text'].lower()
+    ]
 
-    def ok_to_last_message(self):
+    def message_reaction(self, chat_id, message_id, emoji='ok', big=False):
+        return self._do_post('setMessageReaction', {
+            "chat_id": chat_id,
+            "message_id": message_id,
+            "reaction": [{
+                "type": 'emoji',
+                "emoji": EMOJIS[emoji]
+                }],
+            "is_big": big
+        })
 
-        updates = self.get_refered_updates()
-
-        if len(updates) == 0:
-            return
-
-        last_mesage = updates.pop().get('message')
-        data = {
-            "chat_id": last_mesage['chat']['id'],
-            "message_id": last_mesage['message_id'],
-            "reaction": [{"type": 'emoji', "emoji": "👍"}],
-            "is_big": True
-        }
-
-        return self._do_post('setMessageReaction', data)
 
     def send_message(self, message, notify=False):
         if not self.chat_id:
@@ -118,6 +124,7 @@ class TelegramBot():
         data = {
             "chat_id": self.chat_id,
             "text": message,
-            "disable_notification": not notify
+            "disable_notification": not notify,
+            "parse_mode": 'Markdown'
         }
         return self._do_post('sendMessage', data)
