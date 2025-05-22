@@ -11,7 +11,9 @@ EMOJIS = {
     'upset': "🤬",
     'ready': "🫡",
     'ghost': "👻",
-    'mmm': "🤔"
+    'mmm': "🤔",
+    'angel': "😇",
+    'problem': "😨"
 }
 
 class TelegramBot():
@@ -107,7 +109,7 @@ class TelegramBot():
             {
                 "text": x['message']['text'],
                 "chat": x['message']['chat']['id'],
-                "user": x['message']['from']['id'],
+                "username": x['message']['from']['first_name'],
                 "message_id": x['message']['message_id']
             }
             for x in updates

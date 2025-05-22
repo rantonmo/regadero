@@ -1,10 +1,10 @@
 
 import gc
-import re
 import _thread
 
 from network import WLAN as N_WLAN, STA_IF as N_STA_IF
 from os import stat as os_stat, statvfs as os_statvfs, uname as os_uname, listdir as os_listdir
+from re import search as re_search
 from time import localtime as t_localtime, sleep as t_sleep
 
 from json import loads as j_loads
@@ -40,33 +40,37 @@ def listen_to_commands(programs, system, bot):
     while True:
         for command in bot.get_commands():
             try:
-                if re.search('system\s+data', command['text']):
+                if re_search('system\s+data', command['text']):
                     bot.message_reaction(
                         command['chat'], command['message_id'])
                     bot.send_message(system.get_summary())
-                elif re.search('programs?\s+(data|info)', command['text']):
+                elif re_search('programs?\s+(data|info)', command['text']):
                     bot.message_reaction(
                         command['chat'], command['message_id'])
                     text = f"*Programs at {datetime()}*\n"
                     for i, p in enumerate(programs):
                         text += f"_Program id {i}_:\n{p.get_summary()}\n"
                     bot.send_message(text)
-                elif _m := re.search('sets+programs?\s+(\d+)\s+(\w+)\s+(\S+)', command['text']):
+                elif _m := re_search('sets+programs?\s+(\d+)\s+(\w+)\s+(\S+)', command['text']):
                     print(f" set in program {_m.group(1)} parameter: {_m.group(2)} value {_m.group(3)}")
                     if len(programs) < int(_m.group(0)):
                         _msg = programs[int(_m.group(1))].set_param(_m.group(2), _m.group(3))
                         bot.send_message(_msg)
                     else:
                         bot.send_message(f'wrong id for set param in program: {command['text']}')
-                elif _m := re.search('save\s+program\s+(\d+)', command['text']):
+                elif _m := re_search('save\s+program\s+(\d+)', command['text']):
                     if len(programs) < int(_m.group(0)):
                         programs[int(_m.group(0))].save()
                     else:
                         bot.send_message(f'wrong id for save program: {command['text']}')
+                elif re_search('(hello|hola|hi|buenas)', command['text']):
+                    bot.message_reaction(
+                        command['chat'], command['message_id'], 'angel')
+                    bot.send_message(f"Hi {command['username']} at {datetime()}")
                 else:
                     bot.message_reaction(
                         command['chat'], command['message_id'], 'mmm')
-                    bot.send_message('me no entendelll')
+                    bot.send_message('unprecessed command: ' % command['text'])
             except OSError as exc:
                 print("Error analizyng command %s: %s" % (command['text'], exc))
 
