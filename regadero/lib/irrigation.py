@@ -1,4 +1,5 @@
 from os import mkdir as os_mkdir
+from re import match as re_match
 from time import localtime as t_localtime, mktime as t_mktime, sleep as t_sleep
 from json import dumps as j_dumps
 import _thread
@@ -86,13 +87,40 @@ class Program():
 
     def get_summary(self):
         return f"""
-    name: {self.name} - running: {self.running}
-    enabled: {self.enabled}
-    week days: {self.week_days}
-    schedule time: {self.schedule_time['H']}: {self.schedule_time['M']}
-    run_time: {self.run_time}
-    next_run: {datetime(self.next_run_datetime)}
+    name: *{self.name}* - running: *{self.running}*
+    enabled: `{self.enabled}`
+    week days: `{self.week_days}`
+    schedule time: `{self.schedule_time['H']}:{self.schedule_time['M']}`
+    run_time: `{self.run_time}`
+    next_run: `{datetime(self.next_run_datetime)}`
     """
+    def set_param(self, param, value):
+        self.logger.info(f"seting value {value} for param {param}")
+        if param.lower() in ['week_days', 'weekdays', 'wd']:
+            self.week_days = value
+        elif param.lower in ['enable', 'enabled', 'activo']:
+            if value.lower in ['true', 'si', 'yes', '1', 'enable', 'enabled']:
+                self.enabled = True
+            elif value.lower in ['false', 'disable', 'disabled', 'no', '0']:
+                self.enabled = False
+            else:
+                return f"value {value} for param {param} not valid. Ignoring..."
+        elif param.lower in ['runtime', 'run_time', 'duration']:
+            if re_match('^\d+$', value):
+                self.run_time = int(value)
+            else:
+                return f"value {value} not valid for param {param}"
+        elif param.lower in ['schedule_time', 'scheduletime', 'schedule', 'sch']:
+            if re_match('^\d\d:\d\d$', value):
+                self.schedule_time['H'] = value.split(':')[0]
+                self.schedule_time['M'] = value.split(':')[1]
+                self.set_next_run_datetime()
+            else:
+                return f"value {value} not valid for param {param}"
+        else:
+            return f"param {param} is not valid"
+        return f"param {param} configured with value {value} successfull."
+
 
     def save(self, path="/programs"):
         " save program to file "

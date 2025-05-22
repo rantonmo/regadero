@@ -46,12 +46,17 @@ class TelegramBot():
 
     def _do_get(self, path):
         # OSError: -202 --> no wlan connected
+        # OSError: (-10368, 'MBEDTLS_ERR_X509_ALLOC_FAILED')
         self.logger.info(f"doing get to {path}")
-        resp = requests.get(f"{self.base_url}/{path}", timeout=self.timeout)
+        try:
+            resp = requests.get(f"{self.base_url}/{path}", timeout=self.timeout)
+        except OSError as exc:
+            self.logger.error(f"Error doing get to api: {exc}")
+            return []
         if resp.status_code != 200:
             self.logger.error(f"Error doing get: {resp.content}")
             resp.close()
-            return
+            return []
         result = resp.json().get('result')
         resp.close()
         return result
@@ -59,13 +64,17 @@ class TelegramBot():
     def _do_post(self, path, data=None):
 
         self.logger.info(f"doing post to {path} - {data}")
-        resp = requests.post(f"{self.base_url}/{path}",
-                             json=data,
-                             headers=self.headers, timeout=self.timeout)
+        try:
+            resp = requests.post(f"{self.base_url}/{path}",
+                                json=data,
+                                headers=self.headers, timeout=self.timeout)
+        except OSError as exc:
+            self.logger.error(f"Error doing post to api: {exc}")
+            return []
         if resp.status_code != 200:
             self.logger.error(f"Error doing post: {resp.content}")
             resp.close()
-            return False
+            return []
         result = resp.json().get('result')
         resp.close()
         return result
