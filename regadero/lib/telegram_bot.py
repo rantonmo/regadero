@@ -3,6 +3,7 @@ import requests
 
 from logger import Logger
 
+# https://core.telegram.org/bots/api#reactiontype
 EMOJIS = {
     'ok': "👍",
     'ko': "👎",
@@ -12,6 +13,8 @@ EMOJIS = {
     'ready': "🫡",
     'ghost': "👻",
     'mmm': "🤔",
+    'geek': "🤓",
+    'plased': "🤗",
     'angel': "😇",
     'problem': "😨"
 }

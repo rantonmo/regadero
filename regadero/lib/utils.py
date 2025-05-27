@@ -35,7 +35,11 @@ def date(custom_time=None):
     year, month, day, hour, minute, second, weekday, yearday = t_localtime(custom_time)
     return f"{year}-{month:02d}-{day:02d}"
 
-
+HELP_TEXT = """
+* To show info: `system data` or `program data`
+* To modify parameters: `set in program **ID** **PARAMETER** **VALUE**`
+* To save program: `save program **ID**`
+"""
 def listen_to_commands(programs, system, bot):
     while True:
         for command in bot.get_commands():
@@ -72,6 +76,10 @@ def listen_to_commands(programs, system, bot):
                     bot.message_reaction(
                         command['chat'], command['message_id'], 'upset')
                     bot.send_message(f"What the fuck {command['username']}!!!")
+                elif 'help' in command['text']:
+                    bot.message_reaction(
+                        command['chat'], command['message_id'], 'plased')
+                    bot.send_message(HELP_TEXT)
                 else:
                     bot.message_reaction(
                         command['chat'], command['message_id'], 'mmm')
@@ -197,7 +205,7 @@ class system_data():
     `Total flash: {self.flash['total']} free: {self.flash['free']}`
 
     _Wifi:_
-    essid: {self.wlan['essid']} - ip: {self.wlan['ip']} rssi: {self.wlan['rssi']}
+    essid: `{self.wlan['essid']}` - ip: `{self.wlan['ip']}` rssi: `{self.wlan['rssi']}`
     """
     def start(self):
         self.enabled = True
