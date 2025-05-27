@@ -39,6 +39,7 @@ def date(custom_time=None):
 def listen_to_commands(programs, system, bot):
     while True:
         for command in bot.get_commands():
+            gc.collect()
             try:
                 if re_search('system\s+data', command['text']):
                     bot.message_reaction(
@@ -67,10 +68,14 @@ def listen_to_commands(programs, system, bot):
                     bot.message_reaction(
                         command['chat'], command['message_id'], 'angel')
                     bot.send_message(f"Hi {command['username']} at {datetime()}")
+                elif re_search('(fuck|idiota|jodete|cabr.?n|tonto|bobo|payaso)', command['text']):
+                    bot.message_reaction(
+                        command['chat'], command['message_id'], 'upset')
+                    bot.send_message(f"What the fuck {command['username']}!!!")
                 else:
                     bot.message_reaction(
                         command['chat'], command['message_id'], 'mmm')
-                    bot.send_message('unprecessed command: ' % command['text'])
+                    bot.send_message(f"say what? -- '{command['text']}'")
             except OSError as exc:
                 print("Error analizyng command %s: %s" % (command['text'], exc))
 

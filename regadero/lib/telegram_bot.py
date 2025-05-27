@@ -1,4 +1,4 @@
-import json
+from gc import collect as gc_collect
 import requests
 
 from logger import Logger
@@ -33,7 +33,6 @@ class TelegramBot():
     last_update_id = None
 
     def __init__(self, token, chat_id=None):
-
         self.base_url = f"https://api.telegram.org/bot{token}"
         self.chat_id = chat_id
         self.headers = {'Content-Type': 'application/json'}
@@ -45,10 +44,12 @@ class TelegramBot():
         self.logger.info(f"bot initialized with name: {self.first_name} "
                          f"- username: {self.username}")
 
+        self.master_keyword = 'loli'
 
     def _do_get(self, path):
         # OSError: -202 --> no wlan connected
         # OSError: (-10368, 'MBEDTLS_ERR_X509_ALLOC_FAILED')
+        gc_collect()
         self.logger.info(f"doing get to {path}")
         try:
             resp = requests.get(f"{self.base_url}/{path}", timeout=self.timeout)
@@ -64,7 +65,7 @@ class TelegramBot():
         return result
 
     def _do_post(self, path, data=None):
-
+        gc_collect()
         self.logger.info(f"doing post to {path} - {data}")
         try:
             resp = requests.post(f"{self.base_url}/{path}",
@@ -113,8 +114,9 @@ class TelegramBot():
                 "message_id": x['message']['message_id']
             }
             for x in updates
-            if 'text' in x['message'] and 'loli' in x['message']['text'].lower()
-    ]
+            if 'text' in x['message'] and \
+                self.master_keyword in x['message']['text'].lower()
+        ]
 
     def message_reaction(self, chat_id, message_id, emoji='ok', big=False):
         return self._do_post('setMessageReaction', {
@@ -126,7 +128,6 @@ class TelegramBot():
                 }],
             "is_big": big
         })
-
 
     def send_message(self, message, notify=False):
         if not self.chat_id:
