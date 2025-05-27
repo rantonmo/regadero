@@ -37,8 +37,8 @@ def date(custom_time=None):
 
 HELP_TEXT = """
 * To show info: `system data` or `program data`
-* To modify parameters: `set in program **ID** **PARAMETER** **VALUE**`
-* To save program: `save program **ID**`
+* To modify parameters: set in program **ID** **PARAMETER** **VALUE**
+* To save program: save program **ID**
 """
 def listen_to_commands(programs, system, bot):
     while True:
@@ -76,7 +76,7 @@ def listen_to_commands(programs, system, bot):
                     bot.message_reaction(
                         command['chat'], command['message_id'], 'upset')
                     bot.send_message(f"What the fuck {command['username']}!!!")
-                elif 'help' in command['text']:
+                elif re_search('(help|ayuda)', command['text']):
                     bot.message_reaction(
                         command['chat'], command['message_id'], 'plased')
                     bot.send_message(HELP_TEXT)
