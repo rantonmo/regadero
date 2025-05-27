@@ -16,7 +16,7 @@ from irrigation import Program
 
 from utils import datetime, json_data, system_data, listen_to_commands
 
-logger = Logger()
+logger = Logger(rotate=True)
 
 logger.info("schedule gc every day")
 gc.threshold(24 * 60 * 60)

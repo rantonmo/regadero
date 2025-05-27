@@ -13,12 +13,15 @@ class Logger():
     name = None
     sch_rotate_logs = False
 
-    def __init__(self, name="root", filename="regadero.log", path="logs"):
+    def __init__(self, name="root", filename="regadero.log", path="logs", rotate=False):
         self.filename = filename
         self.path = path
         self.name = name
+
         if name == "root":
             self.rotate_logs()
+        if name == 'root' and rotate:
+            self.start_rotate_logs()
 
         LOGGERS.append(self)
         self.info(f"Logger {name} initialized ({len(LOGGERS)})")
