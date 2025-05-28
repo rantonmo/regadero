@@ -61,7 +61,7 @@ if tbot:
 
 programs = [
     Program(j_loads(open(f"/programs/{program_file}").read()), gpm, tbot)
-        for program_file in os_listdir('/programs')
+        for program_file in os_listdir('/programs') if program_file.endswith('json')
 ]
 
 # for prog in programs:
