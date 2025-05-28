@@ -94,8 +94,10 @@ class Program():
     run_time: `{self.run_time}`
     next_run: `{datetime(self.next_run_datetime)}`
     """
-    def set_param(self, param, value):
-        self.logger.info(f"seting value {(value:=value.lower())} for param {(param:=param.lower())}")
+    def set_param(self, param:str, value:str):
+        value = value.lower()
+        param = param.lower()
+        self.logger.info(f"seting value {value} for param {param}")
         if param in ['week_days', 'weekdays', 'wd']:
             self.week_days = value
         elif param in ['enable', 'enabled', 'activo']:
