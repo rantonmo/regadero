@@ -95,22 +95,22 @@ class Program():
     next_run: `{datetime(self.next_run_datetime)}`
     """
     def set_param(self, param, value):
-        self.logger.info(f"seting value {value} for param {param}")
-        if param.lower() in ['week_days', 'weekdays', 'wd']:
+        self.logger.info(f"seting value {(value:=value.lower())} for param {(param:=param.lower())}")
+        if param in ['week_days', 'weekdays', 'wd']:
             self.week_days = value
-        elif param.lower in ['enable', 'enabled', 'activo']:
-            if value.lower in ['true', 'si', 'yes', '1', 'enable', 'enabled']:
+        elif param in ['enable', 'enabled', 'activo']:
+            if value in ['true', 'si', 'yes', '1', 'enable', 'enabled']:
                 self.enabled = True
-            elif value.lower in ['false', 'disable', 'disabled', 'no', '0']:
+            elif value in ['false', 'disable', 'disabled', 'no', '0']:
                 self.enabled = False
             else:
                 return f"value {value} for param {param} not valid. Ignoring..."
-        elif param.lower in ['runtime', 'run_time', 'duration']:
+        elif param in ['runtime', 'run_time', 'duration']:
             if re_match('^\d+$', value):
                 self.run_time = int(value)
             else:
                 return f"value {value} not valid for param {param}"
-        elif param.lower in ['schedule_time', 'scheduletime', 'schedule', 'sch']:
+        elif param in ['schedule_time', 'scheduletime', 'schedule', 'sch']:
             if re_match('^\d\d:\d\d$', value):
                 self.schedule_time['H'] = value.split(':')[0]
                 self.schedule_time['M'] = value.split(':')[1]
@@ -128,6 +128,7 @@ class Program():
             os_mkdir(path)
 
         with open(f"{path}/{self.name.lower().replace(' ', '_')}.json", 'w') as __f:
+            self.logger(f"saving program {self.name}")
             __f.write(j_dumps({
                     "name": self.name,
                     "enabled": self.enabled,
