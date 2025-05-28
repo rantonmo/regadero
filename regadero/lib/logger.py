@@ -24,7 +24,7 @@ class Logger():
             self.start_rotate_logs()
 
         LOGGERS.append(self)
-        self.info(f"Logger {name} initialized ({len(LOGGERS)})")
+        self.info(f"Logger {name} initialized (current loggers: {len(LOGGERS)})")
 
     def rotate_logs(self):
         if f_exists(f"{self.path}/{self.filename}.2"):
@@ -51,7 +51,7 @@ class Logger():
         self.info(f"starting rotate logs schedule every {hours} hours")
         while self.sch_rotate_logs:
             print("rotating logs")
-            self.collect_data()
+            self.rotate_logs()
             t_sleep(60 * 60 * hours)
 
     def emit(self, message, level="INFO"):
