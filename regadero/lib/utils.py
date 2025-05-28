@@ -35,20 +35,23 @@ def date(custom_time=None):
     year, month, day, hour, minute, second, weekday, yearday = t_localtime(custom_time)
     return f"{year}-{month:02d}-{day:02d}"
 
-HELP_TEXT = """
-* To show info: `system data` or `program data`
-* To modify parameters: set in program **ID** **PARAMETER** **VALUE**
-* To save program: save program **ID**
+HELP_TEXT = """*Available commands*
+- To show info: `system data` or `program data`
+- To modify parameters: `set program *ID* *PARAMETER* *VALUE*`
+- To save program: `save program *ID*`
 """
 def listen_to_commands(programs, system, bot):
     while True:
         for command in bot.get_commands():
             gc.collect()
             try:
+                # show system data
+                print(f"command `{command['text']}`")
                 if re_search('system\s+data', command['text']):
                     bot.message_reaction(
                         command['chat'], command['message_id'])
                     bot.send_message(system.get_summary())
+                # show program data
                 elif re_search('programs?\s+(data|info)', command['text']):
                     bot.message_reaction(
                         command['chat'], command['message_id'])
@@ -56,18 +59,20 @@ def listen_to_commands(programs, system, bot):
                     for i, p in enumerate(programs):
                         text += f"_Program id {i}_:\n{p.get_summary()}\n"
                     bot.send_message(text)
-                elif _m := re_search('sets+programs?\s+(\d+)\s+(\w+)\s+(\S+)', command['text']):
-                    print(f" set in program {_m.group(1)} parameter: {_m.group(2)} value {_m.group(3)}")
-                    if len(programs) < int(_m.group(0)):
-                        _msg = programs[int(_m.group(1))].set_param(_m.group(2), _m.group(3))
+                # set program parameter
+                elif _m := re_search('set\s+(pr|prog|programs?)\s*(\d+)\s(\w+)\s+(\S+)', command['text']):
+                    print(f"set in program {_m.group(2)} parameter: {_m.group(3)} value {_m.group(4)}")
+                    if _m.group(2).isdigit() and len(programs) > int(_m.group(2)):
+                        _msg = programs[int(_m.group(2))].set_param(_m.group(3), _m.group(4))
                         bot.send_message(_msg)
                     else:
                         bot.send_message(f'wrong id for set param in program: {command['text']}')
-                elif _m := re_search('save\s+program\s+(\d+)', command['text']):
-                    if len(programs) < int(_m.group(0)):
-                        programs[int(_m.group(0))].save()
+                # save program
+                elif _m := re_search('save\s+(pr|prog|programs?)\s+(\d+)', command['text']):
+                    if _m.group(2).isdigit() and len(programs) > int(_m.group(2)):
+                        programs[int(_m.group(2))].save()
                     else:
-                        bot.send_message(f'wrong id for save program: {command['text']}')
+                        bot.send_message(f'wrong id for save program: `{command['text']}`')
                 elif re_search('(hello|hola|hi|buenas)', command['text']):
                     bot.message_reaction(
                         command['chat'], command['message_id'], 'angel')
