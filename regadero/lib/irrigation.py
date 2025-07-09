@@ -38,7 +38,7 @@ class Program():
             * name (str): name for the program
             * schedule_time (str with format HH:MM): time for the program to start
             * iteration (str): [NUM] DAY|HOUR  -- NOT YET IMPLEMENTED
-            * week_days (str with format, defualt: 0123456): week days for the program to start
+            * week_days (str with format, defualt: 0123456): week days for the program to start (0123456 = LMXJVSD)
             * wether_adjustment (bool default true): adjust times with prediccion data
             * time (int): time in minutes to be used as default value on the zones.
             * zones (list[dict]): Zone specification

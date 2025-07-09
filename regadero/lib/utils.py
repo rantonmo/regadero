@@ -38,6 +38,7 @@ def date(custom_time=None):
 HELP_TEXT = """*Available commands*
 - To show info: `system data` or `program data`
 - To modify parameters: `set program *ID* *PARAMETER* *VALUE*`
+     -> valid aprams: week_days(0123456=LMXJVSD), enable, run_time, schedule_time (HH:MM)
 - To save program: `save program *ID*`
 """
 def listen_to_commands(programs, system, bot):
@@ -70,7 +71,10 @@ def listen_to_commands(programs, system, bot):
                 # save program
                 elif _m := re_search('save\s+(pr|prog|programs?)\s+(\d+)', command['text']):
                     if _m.group(2).isdigit() and len(programs) > int(_m.group(2)):
+                        
+                        bot.message_reaction(command['chat'], command['message_id'])
                         programs[int(_m.group(2))].save()
+                        
                     else:
                         bot.send_message(f'wrong id for save program: `{command['text']}`')
                 elif re_search('(hello|hola|hi|buenas)', command['text']):
