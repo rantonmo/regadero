@@ -1,0 +1,20 @@
+# https://www.codeac.io/documentation/pylint-configuration.html
+
+[MAIN]
+
+disable=
+    missing-function-docstring,
+    missing-module-docstring,
+    missing-module-docstring,
+    missing-class-docstring,
+    too-many-instance-attributes,
+    
+    import-error,
+    line-too-long,
+    invalid-name
+
+
+
+ignore-paths=
+    testing/.*,
+    bck/*
